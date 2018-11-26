@@ -1,5 +1,9 @@
 import ply.lex as lex
 
+'''
+TODO basic
+'''
+
 reserved_words = (
 	'while',
 	'print'

@@ -2,17 +2,10 @@
 import AST
 from AST import addToClass
 
-# opcodes de la SVM
-#    PUSHC <val>     pushes the constant <val> on the stack
-#    PUSHV <id>      pushes the value of identifier <id> on the stack
-#    SET <id>        pops a value from the top of stack and sets <id>
-#    PRINT           pops a value from the top of stack and print it
-#    ADD,SUB,DIV,MUL pops 2 values from the top of stack and compute them
-#    USUB            changes the sign of the number on the top of stack
-#    JMP <tag>       jump to :<tag>
-#    JIZ,JINZ <tag>  pops a value from the top of stack and jump to :<tag> if (not) zero
+'''
+Create the basic c structure
+'''
 
-# chaque opération correspond à son instruction d'exécution de la machine SVM
 operations = {
 	'+' : 'ADD',
 	'-' : 'SUB',
@@ -35,8 +28,8 @@ def compile(self):
 	return bytecode
 
 # noeud terminal
-# si c'est une variable : empile la valeur de la variable
-# si c'est une constante : empile la constante
+# si c'est une variable : todo
+# si c'est une constante : todo
 @addToClass(AST.TokenNode)
 def compile(self):
 	bytecode = ""
@@ -48,7 +41,7 @@ def compile(self):
 	
 # noeud d'assignation de variable
 # exécute le noeud à droite du signe =
-# dépile un élément et le met dans ID
+# todo
 @addToClass(AST.AssignNode)
 def compile(self):
 	bytecode = ""
@@ -57,8 +50,8 @@ def compile(self):
 	return bytecode
 	
 # noeud d'affichage
-# exécute le noeud qui suit le PRINT
-# dépile un élément et l'affiche
+# todo
+# todo
 @addToClass(AST.PrintNode)
 def compile(self):
 	bytecode = ""
@@ -67,8 +60,8 @@ def compile(self):
 	return bytecode
 	
 # noeud d'opération arithmétique
-# si c'est une opération unaire (nombre négatif), empile le nombre et l'inverse
-# si c'est une opération binaire, empile les enfants puis l'opération
+# si c'est une opération unaire (nombre négatif), todo
+# si c'est une opération binaire, todo
 @addToClass(AST.OpNode)
 def compile(self):
 	bytecode = ""
@@ -82,10 +75,7 @@ def compile(self):
 	return bytecode
 	
 # noeud de boucle while
-# saute au label de la condition défini plus bas
-# insère le label puis le corps du body
-# insère le label puis le corps de la condition
-# réalise un saut conditionnel sur le résultat de la condition (empilé)
+# todo
 @addToClass(AST.WhileNode)
 def compile(self):
 	counter = whilecounter()

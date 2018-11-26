@@ -3,6 +3,10 @@ import ply.yacc as yacc
 from lex5 import tokens
 import AST
 
+'''
+TODO basic
+'''
+
 vars = {}
 
 def p_programme_statement(p):
