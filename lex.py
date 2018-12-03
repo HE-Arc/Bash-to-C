@@ -25,12 +25,12 @@ def t_HEADER(t):
 
 def t_SET_IDENTIFIER(t):
 	r'[A-Za-z_]\w*'
+	if t.value in reserved_words:
+		t.type = t.value.upper()
 	return t
 
 def t_IDENTIFIER(t):
 	r'\$[A-Za-z_]\w*'
-	if t.value in reserved_words:
-		t.type = t.value.upper()
 	return t
 
 def t_STRING(t):
