@@ -23,7 +23,7 @@ def p_statement(p):
 
 def p_statement_echo(p):
     ''' statement : ECHO expression '''
-    p[0] = AST.PrintNode(p[2])
+    p[0] = AST.EchoNode(p[2])
 
 def p_expression_num_or_var(p):
     '''expression : NUMBER
