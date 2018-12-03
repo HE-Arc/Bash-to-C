@@ -27,11 +27,11 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> programme","S'",1,None,None,None),
-  ('programme -> statement','programme',1,'p_programme_statement','parser5.py',13),
-  ('programme -> statement newline programme','programme',3,'p_programme_recursive','parser5.py',17),
-  ('statement -> assignation','statement',1,'p_statement','parser5.py',21),
-  ('expression -> NUMBER','expression',1,'p_expression_num_or_var','parser5.py',25),
-  ('expression -> IDENTIFIER','expression',1,'p_expression_num_or_var','parser5.py',26),
-  ('expression -> STRING','expression',1,'p_expression_num_or_var','parser5.py',27),
-  ('assignation -> SET_IDENTIFIER = expression','assignation',3,'p_assign','parser5.py',31),
+  ('programme -> statement','programme',1,'p_programme_statement','parser.py',13),
+  ('programme -> statement newline programme','programme',3,'p_programme_recursive','parser.py',17),
+  ('statement -> assignation','statement',1,'p_statement','parser.py',21),
+  ('expression -> NUMBER','expression',1,'p_expression_num_or_var','parser.py',25),
+  ('expression -> IDENTIFIER','expression',1,'p_expression_num_or_var','parser.py',26),
+  ('expression -> STRING','expression',1,'p_expression_num_or_var','parser.py',27),
+  ('assignation -> SET_IDENTIFIER = expression','assignation',3,'p_assign','parser.py',31),
 ]
