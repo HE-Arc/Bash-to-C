@@ -5,12 +5,13 @@ TODO basic
 '''
 
 reserved_words = (
-	'echo'
+	'echo',
 )
 
 tokens = (
 	'NUMBER',
 	'IDENTIFIER',
+	'STRING',
 ) + tuple(map(lambda s:s.upper(),reserved_words))
 
 literals = '()=$'
@@ -20,7 +21,11 @@ def t_IDENTIFIER(t):
 	if t.value in reserved_words:
 		t.type = t.value.upper()
 	return t
-	
+
+def t_STRING(t):
+	r'".*"'
+	return t
+
 def t_newline(t):
 	r'\n+'
 	t.lexer.lineno += len(t.value)
