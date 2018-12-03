@@ -10,7 +10,7 @@ TODO basic
 vars = {}
 
 def p_programme_statement(p):
-    ''' programme : statement '''
+    ''' programme : statement newline '''
     p[0] = AST.ProgramNode(p[1])
 
 def p_programme_recursive(p):
@@ -26,13 +26,13 @@ def p_statement_echo(p):
     p[0] = AST.EchoNode(p[2])
 
 def p_expression_num_or_var(p):
-    '''expression : NUMBER
+    ''' expression : NUMBER
         | IDENTIFIER
-        | STRING'''
+        | STRING '''
     p[0] = AST.TokenNode(p[1])
 
 def p_assign(p):
-    ''' assignation : SET_IDENTIFIER '=' expression newline'''
+    ''' assignation : SET_IDENTIFIER '=' expression '''
     p[0] = AST.AssignNode([AST.TokenNode(p[1]),p[3]])
 
 def p_error(p):
