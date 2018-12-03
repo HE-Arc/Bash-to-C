@@ -9,18 +9,38 @@ reserved_words = (
 )
 
 tokens = (
-	'NUMBER',
+	'HEADER',
+	'SET_IDENTIFIER',
 	'IDENTIFIER',
+	'STRING',
+	'NUMBER',
+	
 ) + tuple(map(lambda s:s.upper(),reserved_words))
 
 literals = '()=$'
+
+def t_HEADER(t):
+	r'^(\#!\/bin\/bash)'
+	return t
+
+def t_SET_IDENTIFIER(t):
+	r'[A-Za-z_]\w*'
+	return t
 
 def t_IDENTIFIER(t):
 	r'\$[A-Za-z_]\w*'
 	if t.value in reserved_words:
 		t.type = t.value.upper()
 	return t
-	
+
+def t_STRING(t):
+	r'\"(\\.|[^"\\])*\"'
+	return t
+
+def t_NUMBER(t):
+	r'((\d+(\.\d+)*))'
+	return t
+
 def t_newline(t):
 	r'\n+'
 	t.lexer.lineno += len(t.value)
