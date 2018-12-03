@@ -6,18 +6,6 @@ from AST import addToClass
 Create the basic c structure
 '''
 
-operations = {
-	'+' : 'ADD',
-	'-' : 'SUB',
-	'*' : 'MUL',
-	'/' : 'DIV'
-}
-
-def whilecounter():
-	whilecounter.current += 1
-	return whilecounter.current
-whilecounter.current = 0
-
 # noeud de programme
 # retourne la suite d'opcodes de tous les enfants
 @addToClass(AST.ProgramNode)
@@ -59,34 +47,8 @@ def compile(self):
 	bytecode += "PRINT\n"
 	return bytecode
 	
-# noeud d'opération arithmétique
-# si c'est une opération unaire (nombre négatif), todo
-# si c'est une opération binaire, todo
-@addToClass(AST.OpNode)
-def compile(self):
-	bytecode = ""
-	if len(self.children) == 1:
-		bytecode += self.children[0].compile()
-		bytecode += "USUB\n"
-	else:
-		for c in self.children:
-			bytecode += c.compile()
-		bytecode += operations[self.op] + "\n"
-	return bytecode
-	
 # noeud de boucle while
 # todo
-@addToClass(AST.WhileNode)
-def compile(self):
-	counter = whilecounter()
-	bytecode = ""
-	bytecode += "JMP cond%s\n" % counter
-	bytecode += "body%s: " % counter
-	bytecode += self.children[1].compile()
-	bytecode += "cond%s: " % counter
-	bytecode += self.children[0].compile()
-	bytecode += "JINZ body%s\n" % counter
-	return bytecode
 	
 if __name__ == "__main__":
     from parser5 import parse
