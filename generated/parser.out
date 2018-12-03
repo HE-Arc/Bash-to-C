@@ -1,0 +1,148 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    ECHO
+    HEADER
+
+Grammar
+
+Rule 0     S' -> programme
+Rule 1     programme -> statement
+Rule 2     programme -> statement newline programme
+Rule 3     statement -> assignation
+Rule 4     expression -> NUMBER
+Rule 5     expression -> IDENTIFIER
+Rule 6     expression -> STRING
+Rule 7     assignation -> SET_IDENTIFIER = expression
+
+Terminals, with rules where they appear
+
+=                    : 7
+ECHO                 : 
+HEADER               : 
+IDENTIFIER           : 5
+NUMBER               : 4
+SET_IDENTIFIER       : 7
+STRING               : 6
+error                : 
+newline              : 2
+
+Nonterminals, with rules where they appear
+
+assignation          : 3
+expression           : 7
+programme            : 2 0
+statement            : 1 2
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . programme
+    (1) programme -> . statement
+    (2) programme -> . statement newline programme
+    (3) statement -> . assignation
+    (7) assignation -> . SET_IDENTIFIER = expression
+
+    SET_IDENTIFIER  shift and go to state 4
+
+    programme                      shift and go to state 1
+    statement                      shift and go to state 2
+    assignation                    shift and go to state 3
+
+state 1
+
+    (0) S' -> programme .
+
+
+
+state 2
+
+    (1) programme -> statement .
+    (2) programme -> statement . newline programme
+
+    $end            reduce using rule 1 (programme -> statement .)
+    newline         shift and go to state 5
+
+
+state 3
+
+    (3) statement -> assignation .
+
+    newline         reduce using rule 3 (statement -> assignation .)
+    $end            reduce using rule 3 (statement -> assignation .)
+
+
+state 4
+
+    (7) assignation -> SET_IDENTIFIER . = expression
+
+    =               shift and go to state 6
+
+
+state 5
+
+    (2) programme -> statement newline . programme
+    (1) programme -> . statement
+    (2) programme -> . statement newline programme
+    (3) statement -> . assignation
+    (7) assignation -> . SET_IDENTIFIER = expression
+
+    SET_IDENTIFIER  shift and go to state 4
+
+    statement                      shift and go to state 2
+    programme                      shift and go to state 7
+    assignation                    shift and go to state 3
+
+state 6
+
+    (7) assignation -> SET_IDENTIFIER = . expression
+    (4) expression -> . NUMBER
+    (5) expression -> . IDENTIFIER
+    (6) expression -> . STRING
+
+    NUMBER          shift and go to state 9
+    IDENTIFIER      shift and go to state 10
+    STRING          shift and go to state 11
+
+    expression                     shift and go to state 8
+
+state 7
+
+    (2) programme -> statement newline programme .
+
+    $end            reduce using rule 2 (programme -> statement newline programme .)
+
+
+state 8
+
+    (7) assignation -> SET_IDENTIFIER = expression .
+
+    newline         reduce using rule 7 (assignation -> SET_IDENTIFIER = expression .)
+    $end            reduce using rule 7 (assignation -> SET_IDENTIFIER = expression .)
+
+
+state 9
+
+    (4) expression -> NUMBER .
+
+    newline         reduce using rule 4 (expression -> NUMBER .)
+    $end            reduce using rule 4 (expression -> NUMBER .)
+
+
+state 10
+
+    (5) expression -> IDENTIFIER .
+
+    newline         reduce using rule 5 (expression -> IDENTIFIER .)
+    $end            reduce using rule 5 (expression -> IDENTIFIER .)
+
+
+state 11
+
+    (6) expression -> STRING .
+
+    newline         reduce using rule 6 (expression -> STRING .)
+    $end            reduce using rule 6 (expression -> STRING .)
+
