@@ -14,7 +14,7 @@ tokens = (
 	'IDENTIFIER',
 	'STRING',
 	'NUMBER',
-	
+	'newline',
 ) + tuple(map(lambda s:s.upper(),reserved_words))
 
 literals = '()=$'
@@ -44,6 +44,7 @@ def t_NUMBER(t):
 def t_newline(t):
 	r'\n+'
 	t.lexer.lineno += len(t.value)
+	return t
 
 t_ignore  = ' \t'
 
