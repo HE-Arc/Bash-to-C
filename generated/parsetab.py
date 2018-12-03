@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = "ECHO HEADER IDENTIFIER NUMBER SET_IDENTIFIER STRING newline programme : statement  programme : statement newline programme  statement : assignationexpression : NUMBER\n        | IDENTIFIER\n        | STRING assignation : SET_IDENTIFIER '=' expression "
+_lr_signature = "ECHO HEADER IDENTIFIER NUMBER SET_IDENTIFIER STRING newline programme : statement  programme : statement newline programme  statement : assignationexpression : NUMBER\n        | IDENTIFIER\n        | STRING assignation : SET_IDENTIFIER '=' expression newline"
     
-_lr_action_items = {'SET_IDENTIFIER':([0,5,],[4,4,]),'$end':([1,2,3,7,8,9,10,11,],[0,-1,-3,-2,-7,-4,-5,-6,]),'newline':([2,3,8,9,10,11,],[5,-3,-7,-4,-5,-6,]),'=':([4,],[6,]),'NUMBER':([6,],[9,]),'IDENTIFIER':([6,],[10,]),'STRING':([6,],[11,]),}
+_lr_action_items = {'SET_IDENTIFIER':([0,5,],[4,4,]),'$end':([1,2,3,7,12,],[0,-1,-3,-2,-7,]),'newline':([2,3,8,9,10,11,12,],[5,-3,12,-4,-5,-6,-7,]),'=':([4,],[6,]),'NUMBER':([6,],[9,]),'IDENTIFIER':([6,],[10,]),'STRING':([6,],[11,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -33,5 +33,5 @@ _lr_productions = [
   ('expression -> NUMBER','expression',1,'p_expression_num_or_var','parser.py',25),
   ('expression -> IDENTIFIER','expression',1,'p_expression_num_or_var','parser.py',26),
   ('expression -> STRING','expression',1,'p_expression_num_or_var','parser.py',27),
-  ('assignation -> SET_IDENTIFIER = expression','assignation',3,'p_assign','parser.py',31),
+  ('assignation -> SET_IDENTIFIER = expression newline','assignation',4,'p_assign','parser.py',31),
 ]

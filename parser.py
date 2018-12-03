@@ -28,7 +28,7 @@ def p_expression_num_or_var(p):
     p[0] = AST.TokenNode(p[1])
     	
 def p_assign(p):
-    ''' assignation : SET_IDENTIFIER '=' expression '''
+    ''' assignation : SET_IDENTIFIER '=' expression newline'''
     p[0] = AST.AssignNode([AST.TokenNode(p[1]),p[3]])
 
 def p_error(p):
