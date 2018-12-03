@@ -11,27 +11,40 @@ Rule 0     S' -> programme
 Rule 1     programme -> statement
 Rule 2     programme -> statement newline programme
 Rule 3     statement -> assignation
-Rule 4     expression -> NUMBER
-Rule 5     expression -> IDENTIFIER
-Rule 6     expression -> STRING
-Rule 7     assignation -> SET_IDENTIFIER = expression newline
+Rule 4     statement -> declaration
+Rule 5     expression -> INT
+Rule 6     expression -> FLOAT
+Rule 7     expression -> STRING
+Rule 8     expression -> IDENTIFIER
+Rule 9     declaration -> declare_int
+Rule 10    declaration -> declare_float
+Rule 11    declaration -> declare_string
+Rule 12    declare_int -> SET_IDENTIFIER = INT newline
+Rule 13    declare_float -> SET_IDENTIFIER = FLOAT newline
+Rule 14    declare_string -> SET_IDENTIFIER = STRING newline
+Rule 15    assignation -> IDENTIFIER = expression newline
 
 Terminals, with rules where they appear
 
-=                    : 7
+=                    : 12 13 14 15
 ECHO                 : 
+FLOAT                : 6 13
 HEADER               : 
-IDENTIFIER           : 5
-NUMBER               : 4
-SET_IDENTIFIER       : 7
-STRING               : 6
+IDENTIFIER           : 8 15
+INT                  : 5 12
+SET_IDENTIFIER       : 12 13 14
+STRING               : 7 14
 error                : 
-newline              : 2 7
+newline              : 2 12 13 14 15
 
 Nonterminals, with rules where they appear
 
 assignation          : 3
-expression           : 7
+declaration          : 4
+declare_float        : 10
+declare_int          : 9
+declare_string       : 11
+expression           : 15
 programme            : 2 0
 statement            : 1 2
 
@@ -43,13 +56,25 @@ state 0
     (1) programme -> . statement
     (2) programme -> . statement newline programme
     (3) statement -> . assignation
-    (7) assignation -> . SET_IDENTIFIER = expression newline
+    (4) statement -> . declaration
+    (15) assignation -> . IDENTIFIER = expression newline
+    (9) declaration -> . declare_int
+    (10) declaration -> . declare_float
+    (11) declaration -> . declare_string
+    (12) declare_int -> . SET_IDENTIFIER = INT newline
+    (13) declare_float -> . SET_IDENTIFIER = FLOAT newline
+    (14) declare_string -> . SET_IDENTIFIER = STRING newline
 
-    SET_IDENTIFIER  shift and go to state 4
+    IDENTIFIER      shift and go to state 5
+    SET_IDENTIFIER  shift and go to state 9
 
     programme                      shift and go to state 1
     statement                      shift and go to state 2
     assignation                    shift and go to state 3
+    declaration                    shift and go to state 4
+    declare_int                    shift and go to state 6
+    declare_float                  shift and go to state 7
+    declare_string                 shift and go to state 8
 
 state 1
 
@@ -63,7 +88,7 @@ state 2
     (2) programme -> statement . newline programme
 
     $end            reduce using rule 1 (programme -> statement .)
-    newline         shift and go to state 5
+    newline         shift and go to state 10
 
 
 state 3
@@ -76,77 +101,195 @@ state 3
 
 state 4
 
-    (7) assignation -> SET_IDENTIFIER . = expression newline
+    (4) statement -> declaration .
 
-    =               shift and go to state 6
+    newline         reduce using rule 4 (statement -> declaration .)
+    $end            reduce using rule 4 (statement -> declaration .)
 
 
 state 5
+
+    (15) assignation -> IDENTIFIER . = expression newline
+
+    =               shift and go to state 11
+
+
+state 6
+
+    (9) declaration -> declare_int .
+
+    newline         reduce using rule 9 (declaration -> declare_int .)
+    $end            reduce using rule 9 (declaration -> declare_int .)
+
+
+state 7
+
+    (10) declaration -> declare_float .
+
+    newline         reduce using rule 10 (declaration -> declare_float .)
+    $end            reduce using rule 10 (declaration -> declare_float .)
+
+
+state 8
+
+    (11) declaration -> declare_string .
+
+    newline         reduce using rule 11 (declaration -> declare_string .)
+    $end            reduce using rule 11 (declaration -> declare_string .)
+
+
+state 9
+
+    (12) declare_int -> SET_IDENTIFIER . = INT newline
+    (13) declare_float -> SET_IDENTIFIER . = FLOAT newline
+    (14) declare_string -> SET_IDENTIFIER . = STRING newline
+
+    =               shift and go to state 12
+
+
+state 10
 
     (2) programme -> statement newline . programme
     (1) programme -> . statement
     (2) programme -> . statement newline programme
     (3) statement -> . assignation
-    (7) assignation -> . SET_IDENTIFIER = expression newline
+    (4) statement -> . declaration
+    (15) assignation -> . IDENTIFIER = expression newline
+    (9) declaration -> . declare_int
+    (10) declaration -> . declare_float
+    (11) declaration -> . declare_string
+    (12) declare_int -> . SET_IDENTIFIER = INT newline
+    (13) declare_float -> . SET_IDENTIFIER = FLOAT newline
+    (14) declare_string -> . SET_IDENTIFIER = STRING newline
 
-    SET_IDENTIFIER  shift and go to state 4
+    IDENTIFIER      shift and go to state 5
+    SET_IDENTIFIER  shift and go to state 9
 
     statement                      shift and go to state 2
-    programme                      shift and go to state 7
+    programme                      shift and go to state 13
     assignation                    shift and go to state 3
+    declaration                    shift and go to state 4
+    declare_int                    shift and go to state 6
+    declare_float                  shift and go to state 7
+    declare_string                 shift and go to state 8
 
-state 6
+state 11
 
-    (7) assignation -> SET_IDENTIFIER = . expression newline
-    (4) expression -> . NUMBER
-    (5) expression -> . IDENTIFIER
-    (6) expression -> . STRING
+    (15) assignation -> IDENTIFIER = . expression newline
+    (5) expression -> . INT
+    (6) expression -> . FLOAT
+    (7) expression -> . STRING
+    (8) expression -> . IDENTIFIER
 
-    NUMBER          shift and go to state 9
-    IDENTIFIER      shift and go to state 10
-    STRING          shift and go to state 11
+    INT             shift and go to state 16
+    FLOAT           shift and go to state 17
+    STRING          shift and go to state 18
+    IDENTIFIER      shift and go to state 14
 
-    expression                     shift and go to state 8
+    expression                     shift and go to state 15
 
-state 7
+state 12
+
+    (12) declare_int -> SET_IDENTIFIER = . INT newline
+    (13) declare_float -> SET_IDENTIFIER = . FLOAT newline
+    (14) declare_string -> SET_IDENTIFIER = . STRING newline
+
+    INT             shift and go to state 19
+    FLOAT           shift and go to state 20
+    STRING          shift and go to state 21
+
+
+state 13
 
     (2) programme -> statement newline programme .
 
     $end            reduce using rule 2 (programme -> statement newline programme .)
 
 
-state 8
+state 14
 
-    (7) assignation -> SET_IDENTIFIER = expression . newline
+    (8) expression -> IDENTIFIER .
 
-    newline         shift and go to state 12
-
-
-state 9
-
-    (4) expression -> NUMBER .
-
-    newline         reduce using rule 4 (expression -> NUMBER .)
+    newline         reduce using rule 8 (expression -> IDENTIFIER .)
 
 
-state 10
+state 15
 
-    (5) expression -> IDENTIFIER .
+    (15) assignation -> IDENTIFIER = expression . newline
 
-    newline         reduce using rule 5 (expression -> IDENTIFIER .)
-
-
-state 11
-
-    (6) expression -> STRING .
-
-    newline         reduce using rule 6 (expression -> STRING .)
+    newline         shift and go to state 22
 
 
-state 12
+state 16
 
-    (7) assignation -> SET_IDENTIFIER = expression newline .
+    (5) expression -> INT .
 
-    newline         reduce using rule 7 (assignation -> SET_IDENTIFIER = expression newline .)
-    $end            reduce using rule 7 (assignation -> SET_IDENTIFIER = expression newline .)
+    newline         reduce using rule 5 (expression -> INT .)
+
+
+state 17
+
+    (6) expression -> FLOAT .
+
+    newline         reduce using rule 6 (expression -> FLOAT .)
+
+
+state 18
+
+    (7) expression -> STRING .
+
+    newline         reduce using rule 7 (expression -> STRING .)
+
+
+state 19
+
+    (12) declare_int -> SET_IDENTIFIER = INT . newline
+
+    newline         shift and go to state 23
+
+
+state 20
+
+    (13) declare_float -> SET_IDENTIFIER = FLOAT . newline
+
+    newline         shift and go to state 24
+
+
+state 21
+
+    (14) declare_string -> SET_IDENTIFIER = STRING . newline
+
+    newline         shift and go to state 25
+
+
+state 22
+
+    (15) assignation -> IDENTIFIER = expression newline .
+
+    newline         reduce using rule 15 (assignation -> IDENTIFIER = expression newline .)
+    $end            reduce using rule 15 (assignation -> IDENTIFIER = expression newline .)
+
+
+state 23
+
+    (12) declare_int -> SET_IDENTIFIER = INT newline .
+
+    newline         reduce using rule 12 (declare_int -> SET_IDENTIFIER = INT newline .)
+    $end            reduce using rule 12 (declare_int -> SET_IDENTIFIER = INT newline .)
+
+
+state 24
+
+    (13) declare_float -> SET_IDENTIFIER = FLOAT newline .
+
+    newline         reduce using rule 13 (declare_float -> SET_IDENTIFIER = FLOAT newline .)
+    $end            reduce using rule 13 (declare_float -> SET_IDENTIFIER = FLOAT newline .)
+
+
+state 25
+
+    (14) declare_string -> SET_IDENTIFIER = STRING newline .
+
+    newline         reduce using rule 14 (declare_string -> SET_IDENTIFIER = STRING newline .)
+    $end            reduce using rule 14 (declare_string -> SET_IDENTIFIER = STRING newline .)
 

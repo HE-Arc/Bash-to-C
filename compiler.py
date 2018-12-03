@@ -46,15 +46,15 @@ def compile(self):
 	bytecode += self.children[0].compile()
 	bytecode += "PRINT\n"
 	return bytecode
-	
+
 # noeud de boucle while
 # todo
-	
+
 if __name__ == "__main__":
-    from parser5 import parse
+    from parser import parse
     import sys, os
     prog = open(sys.argv[1]).read()
-    ast = parse(prog)
+    ast = parse(prog, debug=True)
 	print(ast)
     compiled = ast.compile()
     name = os.path.splitext(sys.argv[1])[0]+'.vm'    

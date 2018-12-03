@@ -12,8 +12,9 @@ tokens = (
 	'HEADER',
 	'SET_IDENTIFIER',
 	'IDENTIFIER',
+	'INT',
+	'FLOAT',
 	'STRING',
-	'NUMBER',
 	'newline',
 ) + tuple(map(lambda s:s.upper(),reserved_words))
 
@@ -37,8 +38,12 @@ def t_STRING(t):
 	r'\"(\\.|[^"\\])*\"'
 	return t
 
-def t_NUMBER(t):
-	r'((\d+(\.\d+)*))'
+def t_INT(t):
+	r'[1-9]+[0-9]'
+	return t
+
+def t_FLOAT(t):
+	r'\d+\.\d+'
 	return t
 
 def t_newline(t):

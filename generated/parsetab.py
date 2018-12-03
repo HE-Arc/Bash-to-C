@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = "ECHO HEADER IDENTIFIER NUMBER SET_IDENTIFIER STRING newline programme : statement  programme : statement newline programme  statement : assignationexpression : NUMBER\n        | IDENTIFIER\n        | STRING assignation : SET_IDENTIFIER '=' expression newline"
+_lr_signature = "ECHO FLOAT HEADER IDENTIFIER INT SET_IDENTIFIER STRING newline programme : statement  programme : statement newline programme  statement : assignation\n    | declarationexpression : INT\n        | FLOAT\n        | STRING\n        | IDENTIFIER declaration : declare_int\n        | declare_float\n        | declare_string  declare_int : SET_IDENTIFIER '=' INT newline  declare_float : SET_IDENTIFIER '=' FLOAT newline declare_string : SET_IDENTIFIER '=' STRING newline assignation : IDENTIFIER '=' expression newline"
     
-_lr_action_items = {'SET_IDENTIFIER':([0,5,],[4,4,]),'$end':([1,2,3,7,12,],[0,-1,-3,-2,-7,]),'newline':([2,3,8,9,10,11,12,],[5,-3,12,-4,-5,-6,-7,]),'=':([4,],[6,]),'NUMBER':([6,],[9,]),'IDENTIFIER':([6,],[10,]),'STRING':([6,],[11,]),}
+_lr_action_items = {'IDENTIFIER':([0,10,11,],[5,5,14,]),'SET_IDENTIFIER':([0,10,],[9,9,]),'$end':([1,2,3,4,6,7,8,13,22,23,24,25,],[0,-1,-3,-4,-9,-10,-11,-2,-15,-12,-13,-14,]),'newline':([2,3,4,6,7,8,14,15,16,17,18,19,20,21,22,23,24,25,],[10,-3,-4,-9,-10,-11,-8,22,-5,-6,-7,23,24,25,-15,-12,-13,-14,]),'=':([5,9,],[11,12,]),'INT':([11,12,],[16,19,]),'FLOAT':([11,12,],[17,20,]),'STRING':([11,12,],[18,21,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'programme':([0,5,],[1,7,]),'statement':([0,5,],[2,2,]),'assignation':([0,5,],[3,3,]),'expression':([6,],[8,]),}
+_lr_goto_items = {'programme':([0,10,],[1,13,]),'statement':([0,10,],[2,2,]),'assignation':([0,10,],[3,3,]),'declaration':([0,10,],[4,4,]),'declare_int':([0,10,],[6,6,]),'declare_float':([0,10,],[7,7,]),'declare_string':([0,10,],[8,8,]),'expression':([11,],[15,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -30,8 +30,16 @@ _lr_productions = [
   ('programme -> statement','programme',1,'p_programme_statement','parser.py',13),
   ('programme -> statement newline programme','programme',3,'p_programme_recursive','parser.py',17),
   ('statement -> assignation','statement',1,'p_statement','parser.py',21),
-  ('expression -> NUMBER','expression',1,'p_expression_num_or_var','parser.py',25),
-  ('expression -> IDENTIFIER','expression',1,'p_expression_num_or_var','parser.py',26),
-  ('expression -> STRING','expression',1,'p_expression_num_or_var','parser.py',27),
-  ('assignation -> SET_IDENTIFIER = expression newline','assignation',4,'p_assign','parser.py',31),
+  ('statement -> declaration','statement',1,'p_statement','parser.py',22),
+  ('expression -> INT','expression',1,'p_expression_num_or_var','parser.py',26),
+  ('expression -> FLOAT','expression',1,'p_expression_num_or_var','parser.py',27),
+  ('expression -> STRING','expression',1,'p_expression_num_or_var','parser.py',28),
+  ('expression -> IDENTIFIER','expression',1,'p_expression_num_or_var','parser.py',29),
+  ('declaration -> declare_int','declaration',1,'p_declaration','parser.py',33),
+  ('declaration -> declare_float','declaration',1,'p_declaration','parser.py',34),
+  ('declaration -> declare_string','declaration',1,'p_declaration','parser.py',35),
+  ('declare_int -> SET_IDENTIFIER = INT newline','declare_int',4,'p_declare_int','parser.py',39),
+  ('declare_float -> SET_IDENTIFIER = FLOAT newline','declare_float',4,'p_declare_float','parser.py',43),
+  ('declare_string -> SET_IDENTIFIER = STRING newline','declare_string',4,'p_declare_string','parser.py',47),
+  ('assignation -> IDENTIFIER = expression newline','assignation',4,'p_assign','parser.py',51),
 ]
