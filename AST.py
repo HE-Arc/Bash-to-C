@@ -38,13 +38,13 @@ class Node:
                 continue
             result += c.asciitree(prefix)
         return result
-    
+
     def __str__(self):
         return self.asciitree()
-    
+
     def __repr__(self):
         return self.type
-    
+
     def makegraphicaltree(self, dot=None, edgeLabels=True):
             if not dot: dot = pydot.Dot()
             dot.add_node(pydot.Node(self.ID,label=repr(self), shape=self.shape))
@@ -58,7 +58,7 @@ class Node:
                 #Workaround for a bug in pydot 1.0.2 on Windows:
                 #dot.set_graphviz_executables({'dot': r'C:\Program Files\Graphviz2.38\bin\dot.exe'})
             return dot
-        
+
     def threadTree(self, graph, seen = None, col=0):
             colors = ('red', 'green', 'blue', 'yellow', 'magenta', 'cyan')
             if not seen: seen = []
@@ -74,7 +74,7 @@ class Node:
                 if not c: return
                 col = (col + 1) % len(colors)
                 col=0 # FRT pour tout afficher en rouge
-                color = colors[col]                
+                color = colors[col]
                 c.threadTree(graph, seen, col)
                 edge = pydot.Edge(self.ID,c.ID)
                 edge.set_color(color)
@@ -85,22 +85,22 @@ class Node:
                 # tarabiscot� des coutures...
                 # En commantant cette ligne, le layout sera bien meilleur, mais l'arbre nettement
                 # moins reconnaissable.
-                edge.set_constraint('false') 
+                edge.set_constraint('false')
                 if label:
                     edge.set_taillabel(str(i))
                     edge.set_labelfontcolor(color)
                 graph.add_edge(edge)
-            return graph    
-        
+            return graph
+
 class ProgramNode(Node):
     type = 'Program'
-        
+
 class TokenNode(Node):
     type = 'token'
     def __init__(self, tok):
         Node.__init__(self)
         self.tok = tok
-        
+
     def __repr__(self):
         return repr(self.tok)
 
@@ -139,7 +139,7 @@ class OpNode(Node):
             self.nbargs = len(children)
         except AttributeError:
             self.nbargs = 1
-        
+
     def __repr__(self):
         return "%s (%s)" % (self.op, self.nbargs)
 
@@ -154,18 +154,18 @@ class StringDeclareNode(Node):
 
 class AssignNode(Node):
     type = '='
-    
-class PrintNode(Node):
-    type = 'print'
-    
+
+class EchoNode(Node):
+    type = 'echo'
+
 class WhileNode(Node):
     type = 'while'
-    
+
 class EntryNode(Node):
     type = 'ENTRY'
     def __init__(self):
         Node.__init__(self, None)
-    
+
 def addToClass(cls):
     ''' D�corateur permettant d'ajouter la fonction d�cor�e en tant que m�thode
     � une classe.
