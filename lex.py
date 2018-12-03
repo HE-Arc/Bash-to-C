@@ -5,7 +5,7 @@ TODO basic
 '''
 
 reserved_words = (
-	'echo'
+	'echo',
 )
 
 tokens = (
