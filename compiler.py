@@ -11,8 +11,15 @@ Create the basic c structure
 @addToClass(AST.ProgramNode)
 def compile(self):
 	bytecode = ""
+	bytecode += "#include <stdio.h>\n"
+	bytecode += "\n"
+	bytecode += "int main()\n"
+	bytecode += "{\n"
 	for c in self.children:
+		bytecode += "\t"
 		bytecode += c.compile()
+	bytecode += "}"
+
 	return bytecode
 
 # noeud terminal
@@ -21,12 +28,9 @@ def compile(self):
 @addToClass(AST.TokenNode)
 def compile(self):
 	bytecode = ""
-	if isinstance(self.tok, str):
-		bytecode += "PUSHV %s\n" % self.tok
-	else:
-		bytecode += "PUSHC %s\n" % self.tok
+	bytecode += "%s" % self.tok
 	return bytecode
-	
+
 # noeud d'assignation de variable
 # exécute le noeud à droite du signe =
 # todo
@@ -36,15 +40,16 @@ def compile(self):
 	bytecode += self.children[1].compile()
 	bytecode += "SET %s\n" % self.children[0].tok
 	return bytecode
-	
+
 # noeud d'affichage
 # todo
 # todo
-@addToClass(AST.PrintNode)
+@addToClass(AST.EchoNode)
 def compile(self):
 	bytecode = ""
+	bytecode += "printf("
 	bytecode += self.children[0].compile()
-	bytecode += "PRINT\n"
+	bytecode += ");\n"
 	return bytecode
 
 # noeud de boucle while
@@ -54,10 +59,10 @@ if __name__ == "__main__":
     from parser import parse
     import sys, os
     prog = open(sys.argv[1]).read()
-    ast = parse(prog, debug=True)
-	print(ast)
+    ast = parse(prog)
+
     compiled = ast.compile()
-    name = os.path.splitext(sys.argv[1])[0]+'.vm'    
+    name = os.path.splitext(sys.argv[1])[0]+'.c'
     outfile = open(name, 'w')
     outfile.write(compiled)
     outfile.close()
