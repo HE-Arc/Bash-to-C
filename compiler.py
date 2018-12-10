@@ -19,7 +19,6 @@ def compile(self):
 		bytecode += "\t"
 		bytecode += c.compile()
 	bytecode += "}"
-
 	return bytecode
 
 # noeud terminal
@@ -28,7 +27,10 @@ def compile(self):
 @addToClass(AST.TokenNode)
 def compile(self):
 	bytecode = ""
-	bytecode += "%s" % self.tok
+	if "$" in self.tok:	# on doit enlever le dollar avant de donner la variable dans le printf
+		bytecode += "%s" % self.tok[1::]
+	else:
+		bytecode += "%s" % self.tok
 	return bytecode
 
 # noeud d'assignation de variable
@@ -37,8 +39,7 @@ def compile(self):
 @addToClass(AST.AssignNode)
 def compile(self):
 	bytecode = ""
-	bytecode += self.children[1].compile()
-	bytecode += "SET %s\n" % self.children[0].tok
+	bytecode += "char %s[] = %s;\n" % (self.children[0].tok[1::], self.children[1].tok)
 	return bytecode
 
 # noeud d'affichage
