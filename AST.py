@@ -1,4 +1,5 @@
-# coding: latin-1
+#!/usr/bin/python
+# -*- coding: latin-1 -*-
 
 ''' Petit module utilitaire pour la construction, la manipulation et la 
 repr�sentation d'arbres syntaxiques abstraits.
@@ -114,7 +115,7 @@ class IntNode(Node):
         return repr(self.tok)
 
 class FloatNode(Node):
-    # type = 'float'
+    type = 'float'
     def __init__(self, tok):
         Node.__init__(self)
         self.tok = tok
@@ -123,7 +124,7 @@ class FloatNode(Node):
         return repr(self.tok)
 
 class StringNode(Node):
-    # type = 'string'
+    type = 'string'
     def __init__(self, tok):
         Node.__init__(self)
         self.tok = tok
