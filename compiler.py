@@ -30,9 +30,9 @@ def compile(self):
 def compile(self):
 	c_code = ""
 	if "$" in self.tok:	# on doit enlever le dollar avant de donner la variable dans le printf
-		c_code += "%s" % self.tok[1::]
+		c_code += f"{self.tok[1::]}"
 	else:
-		c_code += "%s" % self.tok
+		c_code += f"{self.tok}"
 	return c_code
 
 # noeud d'assignation de variable
@@ -41,25 +41,27 @@ def compile(self):
 @addToClass(AST.AssignNode)
 def compile(self):
 	c_code = ""
-	c_code += "char %s[] = %s;\n" % (self.children[0].tok[1::], self.children[1].tok)
+	c_code += f"char {self.children[0].tok[1::]}[] = {self.children[1].tok};\n"
 	return c_code
 
 @addToClass(AST.IntDeclareNode)
 def compile(self):
 	c_code = ""
-	c_code += "int %s = %s;\n" & self.children[0].tok[1::], self.children[1].tok
+	c_code += f"int {self.children[0].tok} = {self.children[1].tok};\n"
 	return c_code
 
 @addToClass(AST.FloatDeclareNode)
 def compile(self):
 	c_code = ""
-	c_code += "float %s = %s;\n" % (self.children[0].tok[1::], self.children[1].tok)
+	c_code += f"float {self.children[0].tok} = {self.children[1].tok};\n"
 	return c_code
 
 @addToClass(AST.StringDeclareNode)
 def compile(self):
 	c_code = ""
-	c_code += "char %s[] = %s;\n" % (self.children[0].tok[1::], self.children[1].tok)
+	print("var name: " + self.children[0].tok)
+	print("var val: " + self.children[1].tok)
+	c_code += f"char {self.children[0].tok}[] = {self.children[1].tok};\n"
 	return c_code
 
 # noeud d'affichage
