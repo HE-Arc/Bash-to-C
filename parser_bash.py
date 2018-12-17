@@ -33,7 +33,8 @@ def p_expression_num_or_var(p):
     '''expression : INT
         | FLOAT
         | STRING
-        | IDENTIFIER'''
+        | SEQUENCE
+        | EVALUATE '''
 
     p[0] = AST.TokenNode(p[1])
 
@@ -47,17 +48,17 @@ def p_declaration(p):
 
 
 def p_declare_int(p):
-    ''' declare_int : SET_IDENTIFIER '=' INT '''
+    ''' declare_int : SEQUENCE '=' INT '''
     p[0] = AST.IntDeclareNode([AST.IntNode(p[1]), AST.IntNode(int(p[3]))])
 
 
 def p_declare_float(p):
-    ''' declare_float : SET_IDENTIFIER '=' FLOAT '''
+    ''' declare_float : SEQUENCE '=' FLOAT '''
     p[0] = AST.FloatDeclareNode([AST.FloatNode(p[1]), AST.FloatNode(float(p[3]))])
 
 
 def p_declare_string(p):
-    ''' declare_string : SET_IDENTIFIER '=' STRING '''
+    ''' declare_string : SEQUENCE '=' STRING '''
     p[0] = AST.StringDeclareNode([AST.StringNode(p[1]), AST.StringNode(p[3])])
 
 
@@ -81,7 +82,7 @@ if __name__ == '__main__':
     import sys
 
     prog = open(sys.argv[1]).read()
-    result = yacc.parse(prog, debug=False)
+    result = yacc.parse(prog, debug=True)
     if result:
         print(result)
 

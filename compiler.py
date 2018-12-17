@@ -59,8 +59,8 @@ def compile(self):
 @addToClass(AST.StringDeclareNode)
 def compile(self):
 	c_code = ""
-	print("var name: " + self.children[0].tok)
-	print("var val: " + self.children[1].tok)
+	#print("var name: " + self.children[0].tok)
+	#print("var val: " + self.children[1].tok)
 	c_code += f"char {self.children[0].tok}[] = {self.children[1].tok};\n"
 	return c_code
 

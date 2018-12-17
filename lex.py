@@ -13,11 +13,15 @@ reserved_words = (
 
 tokens = (
 	'HEADER',
-	'SET_IDENTIFIER',
-	'IDENTIFIER',
+	'EVALUATE',
+	'SEQUENCE',
 	'INT',
 	'FLOAT',
 	'STRING',
+	'ADD',
+	'MUL',
+	'L_EVALUATE',
+	'R_EVALUATE',
 	'newline',
 ) + tuple(map(lambda s:s.upper(),reserved_words))
 
@@ -27,14 +31,22 @@ def t_HEADER(t):
 	r'^(\#!\/bin\/bash)'
 	return t
 
-def t_SET_IDENTIFIER(t):
+def t_EVALUATE(t):
+	r'\$[A-Za-z_]\w*'
+	return t
+
+def t_L_EVALUATE(t):
+	r'\$\(\('
+	return t
+
+def t_R_EVALUATE(t):
+	r'\)\)'
+	return t
+
+def t_SEQUENCE(t):
 	r'[A-Za-z_]\w*'
 	if t.value in reserved_words:
 		t.type = t.value.upper()
-	return t
-
-def t_IDENTIFIER(t):
-	r'\$[A-Za-z_]\w*'
 	return t
 
 def t_STRING(t):
@@ -47,6 +59,14 @@ def t_INT(t):
 
 def t_FLOAT(t):
 	r'\d+\.\d+'
+	return t
+
+def t_ADD(t):
+	r'[+-]'
+	return t
+
+def t_MUL(t):
+	r'[*/]'
 	return t
 
 def t_newline(t):

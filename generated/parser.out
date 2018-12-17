@@ -2,7 +2,11 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
+    ADD
     HEADER
+    L_EVALUATE
+    MUL
+    R_EVALUATE
 
 Grammar
 
@@ -15,33 +19,38 @@ Rule 5     echo -> ECHO expression
 Rule 6     expression -> INT
 Rule 7     expression -> FLOAT
 Rule 8     expression -> STRING
-Rule 9     expression -> IDENTIFIER
-Rule 10    declaration -> declare_int
-Rule 11    declaration -> declare_float
-Rule 12    declaration -> declare_string
-Rule 13    declare_int -> SET_IDENTIFIER = INT
-Rule 14    declare_float -> SET_IDENTIFIER = FLOAT
-Rule 15    declare_string -> SET_IDENTIFIER = STRING
+Rule 9     expression -> SEQUENCE
+Rule 10    expression -> EVALUATE
+Rule 11    declaration -> declare_int
+Rule 12    declaration -> declare_float
+Rule 13    declaration -> declare_string
+Rule 14    declare_int -> SEQUENCE = INT
+Rule 15    declare_float -> SEQUENCE = FLOAT
+Rule 16    declare_string -> SEQUENCE = STRING
 
 Terminals, with rules where they appear
 
-=                    : 13 14 15
+=                    : 14 15 16
+ADD                  : 
 ECHO                 : 5
-FLOAT                : 7 14
+EVALUATE             : 10
+FLOAT                : 7 15
 HEADER               : 
-IDENTIFIER           : 9
-INT                  : 6 13
-SET_IDENTIFIER       : 13 14 15
-STRING               : 8 15
+INT                  : 6 14
+L_EVALUATE           : 
+MUL                  : 
+R_EVALUATE           : 
+SEQUENCE             : 9 14 15 16
+STRING               : 8 16
 error                : 
 newline              : 2
 
 Nonterminals, with rules where they appear
 
 declaration          : 3
-declare_float        : 11
-declare_int          : 10
-declare_string       : 12
+declare_float        : 12
+declare_int          : 11
+declare_string       : 13
 echo                 : 4
 expression           : 5
 programme            : 2 0
@@ -56,16 +65,16 @@ state 0
     (2) programme -> . statement newline programme
     (3) statement -> . declaration
     (4) statement -> . echo
-    (10) declaration -> . declare_int
-    (11) declaration -> . declare_float
-    (12) declaration -> . declare_string
+    (11) declaration -> . declare_int
+    (12) declaration -> . declare_float
+    (13) declaration -> . declare_string
     (5) echo -> . ECHO expression
-    (13) declare_int -> . SET_IDENTIFIER = INT
-    (14) declare_float -> . SET_IDENTIFIER = FLOAT
-    (15) declare_string -> . SET_IDENTIFIER = STRING
+    (14) declare_int -> . SEQUENCE = INT
+    (15) declare_float -> . SEQUENCE = FLOAT
+    (16) declare_string -> . SEQUENCE = STRING
 
     ECHO            shift and go to state 8
-    SET_IDENTIFIER  shift and go to state 9
+    SEQUENCE        shift and go to state 9
 
     programme                      shift and go to state 1
     statement                      shift and go to state 2
@@ -108,26 +117,26 @@ state 4
 
 state 5
 
-    (10) declaration -> declare_int .
+    (11) declaration -> declare_int .
 
-    newline         reduce using rule 10 (declaration -> declare_int .)
-    $end            reduce using rule 10 (declaration -> declare_int .)
+    newline         reduce using rule 11 (declaration -> declare_int .)
+    $end            reduce using rule 11 (declaration -> declare_int .)
 
 
 state 6
 
-    (11) declaration -> declare_float .
+    (12) declaration -> declare_float .
 
-    newline         reduce using rule 11 (declaration -> declare_float .)
-    $end            reduce using rule 11 (declaration -> declare_float .)
+    newline         reduce using rule 12 (declaration -> declare_float .)
+    $end            reduce using rule 12 (declaration -> declare_float .)
 
 
 state 7
 
-    (12) declaration -> declare_string .
+    (13) declaration -> declare_string .
 
-    newline         reduce using rule 12 (declaration -> declare_string .)
-    $end            reduce using rule 12 (declaration -> declare_string .)
+    newline         reduce using rule 13 (declaration -> declare_string .)
+    $end            reduce using rule 13 (declaration -> declare_string .)
 
 
 state 8
@@ -136,22 +145,24 @@ state 8
     (6) expression -> . INT
     (7) expression -> . FLOAT
     (8) expression -> . STRING
-    (9) expression -> . IDENTIFIER
+    (9) expression -> . SEQUENCE
+    (10) expression -> . EVALUATE
 
     INT             shift and go to state 12
     FLOAT           shift and go to state 13
     STRING          shift and go to state 14
-    IDENTIFIER      shift and go to state 15
+    SEQUENCE        shift and go to state 15
+    EVALUATE        shift and go to state 16
 
     expression                     shift and go to state 11
 
 state 9
 
-    (13) declare_int -> SET_IDENTIFIER . = INT
-    (14) declare_float -> SET_IDENTIFIER . = FLOAT
-    (15) declare_string -> SET_IDENTIFIER . = STRING
+    (14) declare_int -> SEQUENCE . = INT
+    (15) declare_float -> SEQUENCE . = FLOAT
+    (16) declare_string -> SEQUENCE . = STRING
 
-    =               shift and go to state 16
+    =               shift and go to state 17
 
 
 state 10
@@ -161,19 +172,19 @@ state 10
     (2) programme -> . statement newline programme
     (3) statement -> . declaration
     (4) statement -> . echo
-    (10) declaration -> . declare_int
-    (11) declaration -> . declare_float
-    (12) declaration -> . declare_string
+    (11) declaration -> . declare_int
+    (12) declaration -> . declare_float
+    (13) declaration -> . declare_string
     (5) echo -> . ECHO expression
-    (13) declare_int -> . SET_IDENTIFIER = INT
-    (14) declare_float -> . SET_IDENTIFIER = FLOAT
-    (15) declare_string -> . SET_IDENTIFIER = STRING
+    (14) declare_int -> . SEQUENCE = INT
+    (15) declare_float -> . SEQUENCE = FLOAT
+    (16) declare_string -> . SEQUENCE = STRING
 
     ECHO            shift and go to state 8
-    SET_IDENTIFIER  shift and go to state 9
+    SEQUENCE        shift and go to state 9
 
     statement                      shift and go to state 2
-    programme                      shift and go to state 17
+    programme                      shift and go to state 18
     declaration                    shift and go to state 3
     echo                           shift and go to state 4
     declare_int                    shift and go to state 5
@@ -214,50 +225,58 @@ state 14
 
 state 15
 
-    (9) expression -> IDENTIFIER .
+    (9) expression -> SEQUENCE .
 
-    newline         reduce using rule 9 (expression -> IDENTIFIER .)
-    $end            reduce using rule 9 (expression -> IDENTIFIER .)
+    newline         reduce using rule 9 (expression -> SEQUENCE .)
+    $end            reduce using rule 9 (expression -> SEQUENCE .)
 
 
 state 16
 
-    (13) declare_int -> SET_IDENTIFIER = . INT
-    (14) declare_float -> SET_IDENTIFIER = . FLOAT
-    (15) declare_string -> SET_IDENTIFIER = . STRING
+    (10) expression -> EVALUATE .
 
-    INT             shift and go to state 18
-    FLOAT           shift and go to state 19
-    STRING          shift and go to state 20
+    newline         reduce using rule 10 (expression -> EVALUATE .)
+    $end            reduce using rule 10 (expression -> EVALUATE .)
 
 
 state 17
+
+    (14) declare_int -> SEQUENCE = . INT
+    (15) declare_float -> SEQUENCE = . FLOAT
+    (16) declare_string -> SEQUENCE = . STRING
+
+    INT             shift and go to state 19
+    FLOAT           shift and go to state 20
+    STRING          shift and go to state 21
+
+
+state 18
 
     (2) programme -> statement newline programme .
 
     $end            reduce using rule 2 (programme -> statement newline programme .)
 
 
-state 18
-
-    (13) declare_int -> SET_IDENTIFIER = INT .
-
-    newline         reduce using rule 13 (declare_int -> SET_IDENTIFIER = INT .)
-    $end            reduce using rule 13 (declare_int -> SET_IDENTIFIER = INT .)
-
-
 state 19
 
-    (14) declare_float -> SET_IDENTIFIER = FLOAT .
+    (14) declare_int -> SEQUENCE = INT .
 
-    newline         reduce using rule 14 (declare_float -> SET_IDENTIFIER = FLOAT .)
-    $end            reduce using rule 14 (declare_float -> SET_IDENTIFIER = FLOAT .)
+    newline         reduce using rule 14 (declare_int -> SEQUENCE = INT .)
+    $end            reduce using rule 14 (declare_int -> SEQUENCE = INT .)
 
 
 state 20
 
-    (15) declare_string -> SET_IDENTIFIER = STRING .
+    (15) declare_float -> SEQUENCE = FLOAT .
 
-    newline         reduce using rule 15 (declare_string -> SET_IDENTIFIER = STRING .)
-    $end            reduce using rule 15 (declare_string -> SET_IDENTIFIER = STRING .)
+    newline         reduce using rule 15 (declare_float -> SEQUENCE = FLOAT .)
+    $end            reduce using rule 15 (declare_float -> SEQUENCE = FLOAT .)
+
+
+state 21
+
+    (16) declare_string -> SEQUENCE = STRING .
+
+    newline         reduce using rule 16 (declare_string -> SEQUENCE = STRING .)
+    $end            reduce using rule 16 (declare_string -> SEQUENCE = STRING .)
 

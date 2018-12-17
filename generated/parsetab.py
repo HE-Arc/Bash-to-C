@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = "ECHO FLOAT HEADER IDENTIFIER INT SET_IDENTIFIER STRING newline programme : statement  programme : statement newline programme  statement : declaration\n        | echo  echo : ECHO expression expression : INT\n        | FLOAT\n        | STRING\n        | IDENTIFIER declaration : declare_int\n        | declare_float\n        | declare_string  declare_int : SET_IDENTIFIER '=' INT  declare_float : SET_IDENTIFIER '=' FLOAT  declare_string : SET_IDENTIFIER '=' STRING "
+_lr_signature = "ADD ECHO EVALUATE FLOAT HEADER INT L_EVALUATE MUL R_EVALUATE SEQUENCE STRING newline programme : statement  programme : statement newline programme  statement : declaration\n        | echo  echo : ECHO expression expression : INT\n        | FLOAT\n        | STRING\n        | SEQUENCE\n        | EVALUATE  declaration : declare_int\n        | declare_float\n        | declare_string  declare_int : SEQUENCE '=' INT  declare_float : SEQUENCE '=' FLOAT  declare_string : SEQUENCE '=' STRING "
     
-_lr_action_items = {'ECHO':([0,10,],[8,8,]),'SET_IDENTIFIER':([0,10,],[9,9,]),'$end':([1,2,3,4,5,6,7,11,12,13,14,15,17,18,19,20,],[0,-1,-3,-4,-10,-11,-12,-5,-6,-7,-8,-9,-2,-13,-14,-15,]),'newline':([2,3,4,5,6,7,11,12,13,14,15,18,19,20,],[10,-3,-4,-10,-11,-12,-5,-6,-7,-8,-9,-13,-14,-15,]),'INT':([8,16,],[12,18,]),'FLOAT':([8,16,],[13,19,]),'STRING':([8,16,],[14,20,]),'IDENTIFIER':([8,],[15,]),'=':([9,],[16,]),}
+_lr_action_items = {'ECHO':([0,10,],[8,8,]),'SEQUENCE':([0,8,10,],[9,15,9,]),'$end':([1,2,3,4,5,6,7,11,12,13,14,15,16,18,19,20,21,],[0,-1,-3,-4,-11,-12,-13,-5,-6,-7,-8,-9,-10,-2,-14,-15,-16,]),'newline':([2,3,4,5,6,7,11,12,13,14,15,16,19,20,21,],[10,-3,-4,-11,-12,-13,-5,-6,-7,-8,-9,-10,-14,-15,-16,]),'INT':([8,17,],[12,19,]),'FLOAT':([8,17,],[13,20,]),'STRING':([8,17,],[14,21,]),'EVALUATE':([8,],[16,]),'=':([9,],[17,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'programme':([0,10,],[1,17,]),'statement':([0,10,],[2,2,]),'declaration':([0,10,],[3,3,]),'echo':([0,10,],[4,4,]),'declare_int':([0,10,],[5,5,]),'declare_float':([0,10,],[6,6,]),'declare_string':([0,10,],[7,7,]),'expression':([8,],[11,]),}
+_lr_goto_items = {'programme':([0,10,],[1,18,]),'statement':([0,10,],[2,2,]),'declaration':([0,10,],[3,3,]),'echo':([0,10,],[4,4,]),'declare_int':([0,10,],[5,5,]),'declare_float':([0,10,],[6,6,]),'declare_string':([0,10,],[7,7,]),'expression':([8,],[11,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -35,11 +35,12 @@ _lr_productions = [
   ('expression -> INT','expression',1,'p_expression_num_or_var','parser_bash.py',33),
   ('expression -> FLOAT','expression',1,'p_expression_num_or_var','parser_bash.py',34),
   ('expression -> STRING','expression',1,'p_expression_num_or_var','parser_bash.py',35),
-  ('expression -> IDENTIFIER','expression',1,'p_expression_num_or_var','parser_bash.py',36),
-  ('declaration -> declare_int','declaration',1,'p_declaration','parser_bash.py',42),
-  ('declaration -> declare_float','declaration',1,'p_declaration','parser_bash.py',43),
-  ('declaration -> declare_string','declaration',1,'p_declaration','parser_bash.py',44),
-  ('declare_int -> SET_IDENTIFIER = INT','declare_int',3,'p_declare_int','parser_bash.py',50),
-  ('declare_float -> SET_IDENTIFIER = FLOAT','declare_float',3,'p_declare_float','parser_bash.py',55),
-  ('declare_string -> SET_IDENTIFIER = STRING','declare_string',3,'p_declare_string','parser_bash.py',60),
+  ('expression -> SEQUENCE','expression',1,'p_expression_num_or_var','parser_bash.py',36),
+  ('expression -> EVALUATE','expression',1,'p_expression_num_or_var','parser_bash.py',37),
+  ('declaration -> declare_int','declaration',1,'p_declaration','parser_bash.py',43),
+  ('declaration -> declare_float','declaration',1,'p_declaration','parser_bash.py',44),
+  ('declaration -> declare_string','declaration',1,'p_declaration','parser_bash.py',45),
+  ('declare_int -> SEQUENCE = INT','declare_int',3,'p_declare_int','parser_bash.py',51),
+  ('declare_float -> SEQUENCE = FLOAT','declare_float',3,'p_declare_float','parser_bash.py',56),
+  ('declare_string -> SEQUENCE = STRING','declare_string',3,'p_declare_string','parser_bash.py',61),
 ]
