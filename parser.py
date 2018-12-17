@@ -41,15 +41,15 @@ def p_declaration(p):
 
 def p_declare_int(p):
     ''' declare_int : SET_IDENTIFIER '=' INT '''
-    p[0] = AST.IntDeclareNode([AST.IntNode(p[1]), p[3]])
+    p[0] = AST.IntDeclareNode([AST.IntNode(p[1]), AST.IntNode(int(p[3]))])
 
 def p_declare_float(p):
     ''' declare_float : SET_IDENTIFIER '=' FLOAT '''
-    p[0] = AST.FloatDeclareNode([AST.FloatNode(p[1]), float(p[3])])
+    p[0] = AST.FloatDeclareNode([AST.FloatNode(p[1]), AST.FloatNode(float(p[3]))])
 
 def p_declare_string(p):
     ''' declare_string : SET_IDENTIFIER '=' STRING '''
-    p[0] = AST.StringDeclareNode([AST.StringNode(p[1]), p[3]])
+    p[0] = AST.StringDeclareNode([AST.StringNode(p[1]), AST.StringNode(p[3])])
 
 def p_error(p):
     if p:
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     import sys
 
     prog = open(sys.argv[1]).read()
-    result = yacc.parse(prog, debug=True)
+    result = yacc.parse(prog, debug=False)
     if result:
         print (result)
 

@@ -105,7 +105,7 @@ class TokenNode(Node):
         return repr(self.tok)
 
 class IntNode(Node):
-    # type = 'int'
+    type = 'INT'
     def __init__(self, tok):
         Node.__init__(self)
         self.tok = tok
