@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = "ECHO FLOAT HEADER IDENTIFIER INT SET_IDENTIFIER STRING newline programme : statement newline  programme : statement newline programme  statement : assignation\n    | declaration statement : ECHO expression expression : INT\n        | FLOAT\n        | STRING\n        | IDENTIFIER declaration : declare_int\n        | declare_float\n        | declare_string  declare_int : SET_IDENTIFIER '=' INT newline  declare_float : SET_IDENTIFIER '=' FLOAT newline declare_string : SET_IDENTIFIER '=' STRING newline assignation : IDENTIFIER '=' expression newline"
+_lr_signature = "ECHO FLOAT HEADER IDENTIFIER INT SET_IDENTIFIER STRING newline programme : statement  programme : statement newline programme  statement : declaration\n        | echo  echo : ECHO expression expression : INT\n        | FLOAT\n        | STRING\n        | IDENTIFIER declaration : declare_int\n        | declare_float\n        | declare_string  declare_int : SET_IDENTIFIER '=' INT  declare_float : SET_IDENTIFIER '=' FLOAT  declare_string : SET_IDENTIFIER '=' STRING "
     
-_lr_action_items = {'ECHO':([0,11,],[5,5,]),'IDENTIFIER':([0,5,11,17,],[6,16,6,16,]),'SET_IDENTIFIER':([0,11,],[10,10,]),'$end':([1,11,19,],[0,-1,-2,]),'newline':([2,3,4,7,8,9,12,13,14,15,16,20,21,22,23,24,25,26,27,],[11,-3,-4,-10,-11,-12,-5,-6,-7,-8,-9,24,25,26,27,-16,-13,-14,-15,]),'INT':([5,17,18,],[13,13,21,]),'FLOAT':([5,17,18,],[14,14,22,]),'STRING':([5,17,18,],[15,15,23,]),'=':([6,10,],[17,18,]),}
+_lr_action_items = {'ECHO':([0,10,],[8,8,]),'SET_IDENTIFIER':([0,10,],[9,9,]),'$end':([1,2,3,4,5,6,7,11,12,13,14,15,17,18,19,20,],[0,-1,-3,-4,-10,-11,-12,-5,-6,-7,-8,-9,-2,-13,-14,-15,]),'newline':([2,3,4,5,6,7,11,12,13,14,15,18,19,20,],[10,-3,-4,-10,-11,-12,-5,-6,-7,-8,-9,-13,-14,-15,]),'INT':([8,16,],[12,18,]),'FLOAT':([8,16,],[13,19,]),'STRING':([8,16,],[14,20,]),'IDENTIFIER':([8,],[15,]),'=':([9,],[16,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'programme':([0,11,],[1,19,]),'statement':([0,11,],[2,2,]),'assignation':([0,11,],[3,3,]),'declaration':([0,11,],[4,4,]),'declare_int':([0,11,],[7,7,]),'declare_float':([0,11,],[8,8,]),'declare_string':([0,11,],[9,9,]),'expression':([5,17,],[12,20,]),}
+_lr_goto_items = {'programme':([0,10,],[1,17,]),'statement':([0,10,],[2,2,]),'declaration':([0,10,],[3,3,]),'echo':([0,10,],[4,4,]),'declare_int':([0,10,],[5,5,]),'declare_float':([0,10,],[6,6,]),'declare_string':([0,10,],[7,7,]),'expression':([8,],[11,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,11 +27,11 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> programme","S'",1,None,None,None),
-  ('programme -> statement newline','programme',2,'p_programme_statement','parser.py',13),
+  ('programme -> statement','programme',1,'p_programme_statement','parser.py',13),
   ('programme -> statement newline programme','programme',3,'p_programme_recursive','parser.py',17),
-  ('statement -> assignation','statement',1,'p_statement','parser.py',21),
-  ('statement -> declaration','statement',1,'p_statement','parser.py',22),
-  ('statement -> ECHO expression','statement',2,'p_statement_echo','parser.py',26),
+  ('statement -> declaration','statement',1,'p_statement','parser.py',21),
+  ('statement -> echo','statement',1,'p_statement','parser.py',22),
+  ('echo -> ECHO expression','echo',2,'p_echo','parser.py',26),
   ('expression -> INT','expression',1,'p_expression_num_or_var','parser.py',30),
   ('expression -> FLOAT','expression',1,'p_expression_num_or_var','parser.py',31),
   ('expression -> STRING','expression',1,'p_expression_num_or_var','parser.py',32),
@@ -39,8 +39,7 @@ _lr_productions = [
   ('declaration -> declare_int','declaration',1,'p_declaration','parser.py',37),
   ('declaration -> declare_float','declaration',1,'p_declaration','parser.py',38),
   ('declaration -> declare_string','declaration',1,'p_declaration','parser.py',39),
-  ('declare_int -> SET_IDENTIFIER = INT newline','declare_int',4,'p_declare_int','parser.py',43),
-  ('declare_float -> SET_IDENTIFIER = FLOAT newline','declare_float',4,'p_declare_float','parser.py',47),
-  ('declare_string -> SET_IDENTIFIER = STRING newline','declare_string',4,'p_declare_string','parser.py',51),
-  ('assignation -> IDENTIFIER = expression newline','assignation',4,'p_assign','parser.py',55),
+  ('declare_int -> SET_IDENTIFIER = INT','declare_int',3,'p_declare_int','parser.py',43),
+  ('declare_float -> SET_IDENTIFIER = FLOAT','declare_float',3,'p_declare_float','parser.py',47),
+  ('declare_string -> SET_IDENTIFIER = STRING','declare_string',3,'p_declare_string','parser.py',51),
 ]

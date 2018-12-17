@@ -105,7 +105,7 @@ class TokenNode(Node):
         return repr(self.tok)
 
 class IntNode(Node):
-    type = 'int'
+    # type = 'int'
     def __init__(self, tok):
         Node.__init__(self)
         self.tok = tok
@@ -114,7 +114,7 @@ class IntNode(Node):
         return repr(self.tok)
 
 class FloatNode(Node):
-    type = 'float'
+    # type = 'float'
     def __init__(self, tok):
         Node.__init__(self)
         self.tok = tok
@@ -123,7 +123,7 @@ class FloatNode(Node):
         return repr(self.tok)
 
 class StringNode(Node):
-    type = 'string'
+    # type = 'string'
     def __init__(self, tok):
         Node.__init__(self)
         self.tok = tok
