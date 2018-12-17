@@ -33,8 +33,8 @@ def p_expression_num_or_var(p):
     '''expression : INT
         | FLOAT
         | STRING
-        | SEQUENCE
-        | EVALUATE '''
+        | EVALUATE 
+        | operation '''
 
     p[0] = AST.TokenNode(p[1])
 
@@ -61,6 +61,10 @@ def p_declare_string(p):
     ''' declare_string : SEQUENCE '=' STRING '''
     p[0] = AST.StringDeclareNode([AST.StringNode(p[1]), AST.StringNode(p[3])])
 
+def p_operation(p):
+    ''' operation : L_EVALUATE expression ADD expression R_EVALUATE
+        | L_EVALUATE expression MUL expression R_EVALUATE '''
+    p[0] = AST.OpNode(p[2], [p[1], p[3]])
 
 def p_error(p):
     if p:

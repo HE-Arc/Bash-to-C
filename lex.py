@@ -13,13 +13,13 @@ reserved_words = (
 
 tokens = (
 	'HEADER',
-	'EVALUATE',
 	'SEQUENCE',
 	'INT',
 	'FLOAT',
 	'STRING',
 	'ADD',
 	'MUL',
+	'EVALUATE',
 	'L_EVALUATE',
 	'R_EVALUATE',
 	'newline',
@@ -28,7 +28,33 @@ tokens = (
 literals = '()=$'
 
 def t_HEADER(t):
-	r'^(\#!\/bin\/bash)'
+	r'^(\#!\/bin\/bash\n)'
+	return t
+
+def t_SEQUENCE(t):
+	r'[A-Za-z_]\w*'
+	if t.value in reserved_words:
+		t.type = t.value.upper()
+	return t
+
+def t_INT(t):
+	r'[1-9]*[0-9]'
+	return t
+
+def t_FLOAT(t):
+	r'\d+\.\d+'
+	return t
+
+def t_STRING(t):
+	r'\"(\\.|[^"\\])*\"'
+	return t
+
+def t_ADD(t):
+	r'[+-]'
+	return t
+
+def t_MUL(t):
+	r'[*/]'
 	return t
 
 def t_EVALUATE(t):
@@ -41,32 +67,6 @@ def t_L_EVALUATE(t):
 
 def t_R_EVALUATE(t):
 	r'\)\)'
-	return t
-
-def t_SEQUENCE(t):
-	r'[A-Za-z_]\w*'
-	if t.value in reserved_words:
-		t.type = t.value.upper()
-	return t
-
-def t_STRING(t):
-	r'\"(\\.|[^"\\])*\"'
-	return t
-
-def t_INT(t):
-	r'[1-9]+[0-9]'
-	return t
-
-def t_FLOAT(t):
-	r'\d+\.\d+'
-	return t
-
-def t_ADD(t):
-	r'[+-]'
-	return t
-
-def t_MUL(t):
-	r'[*/]'
 	return t
 
 def t_newline(t):
