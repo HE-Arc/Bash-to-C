@@ -20,7 +20,8 @@ def p_programme_recursive(p):
 
 def p_statement(p):
     ''' statement : declaration
-        | echo '''
+        | echo
+        | operation '''
     p[0] = p[1]
 
 
@@ -48,7 +49,7 @@ def p_declaration(p):
 
 
 def p_declare_int(p):
-    ''' declare_int : SEQUENCE '=' INT '''
+    ''' declare_int : SEQUENCE '=' INT '''  # sequence = expression is better...
     p[0] = AST.IntDeclareNode([AST.IntNode(p[1]), AST.IntNode(int(p[3]))])
 
 
