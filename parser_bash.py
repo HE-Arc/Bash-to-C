@@ -5,67 +5,57 @@ import ply.yacc as yacc
 
 from lex import tokens
 import AST
+from tools import *
 
 vars = {}
 
 def p_programme_statement(p):
-    ''' programme : statement '''
+    ''' programme : statement newline '''
     p[0] = AST.ProgramNode(p[1])
 
 
 def p_programme_recursive(p):
     ''' programme : statement newline programme '''
-    p[0] = AST.ProgramNode([p[1]] + p[3].children)
+    p[0] = AST.ProgramNode([p[1]]+p[3].children)
 
 
 def p_statement(p):
-    ''' statement : declaration
-        | echo
-        | operation '''
+    ''' statement : affectation '''
     p[0] = p[1]
+
+
+def p_statement_affectation(p):
+    ''' affectation : SET_VARIABLE '=' expression '''
+    p[0] = AST.AssignNode([AST.TokenNode(p[1]), p[3]])
 
 
 def p_echo(p):
-    ''' echo : ECHO expression '''
+    ''' statement : ECHO expression '''
     p[0] = AST.EchoNode(p[2])
 
 
-def p_expression_num_or_var(p):
-    '''expression : INT
-        | FLOAT
-        | STRING
-        | EVALUATE 
-        | operation '''
-
+def p_expression_var(p):
+    ''' expression : GET_VARIABLE '''
     p[0] = AST.TokenNode(p[1])
 
 
-def p_declaration(p):
-    ''' declaration : declare_int
-        | declare_float
-        | declare_string '''
-
-    p[0] = p[1]
-
-
-def p_declare_int(p):
-    ''' declare_int : SEQUENCE '=' INT '''  # sequence = expression is better...
-    p[0] = AST.IntDeclareNode([AST.IntNode(p[1]), AST.IntNode(int(p[3]))])
-
-
-def p_declare_float(p):
-    ''' declare_float : SEQUENCE '=' FLOAT '''
-    p[0] = AST.FloatDeclareNode([AST.FloatNode(p[1]), AST.FloatNode(float(p[3]))])
+def p_expression_val(p):
+    ''' expression : FLOAT
+        | INT
+        | STRING '''
+    if(is_int(p[1])):
+        p[0] = AST.IntNode(int(p[1]))
+    elif(is_float(p[1])):
+        p[0] = AST.FloatNode(float(p[1]))
+    else:
+        p[0] = AST.StringNode(p[1])
 
 
-def p_declare_string(p):
-    ''' declare_string : SEQUENCE '=' STRING '''
-    p[0] = AST.StringDeclareNode([AST.StringNode(p[1]), AST.StringNode(p[3])])
+def p_expression_op(p):
+    ''' expression : '$' '(' '(' expression ADD_OP expression ')' ')'
+                    | '$' '(' '(' expression MUL_OP expression ')' ')' '''
+    p[0] = AST.OpNode(p[5], [p[4], p[6]])
 
-def p_operation(p):
-    ''' operation : L_EVALUATE expression ADD expression R_EVALUATE
-        | L_EVALUATE expression MUL expression R_EVALUATE '''
-    p[0] = AST.OpNode(p[2], [p[1], p[3]])
 
 def p_error(p):
     if p:
@@ -77,7 +67,6 @@ def p_error(p):
 
 def parse(program):
     ''' parser yacc '''
-
     return yacc.parse(program)
 
 
