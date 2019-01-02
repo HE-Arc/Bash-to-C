@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = "ADD ECHO EVALUATE FLOAT HEADER INT L_EVALUATE MUL R_EVALUATE SEQUENCE STRING newline programme : statement  programme : statement newline programme  statement : declaration\n        | echo\n        | operation  echo : ECHO expression expression : INT\n        | FLOAT\n        | STRING\n        | EVALUATE \n        | operation  declaration : declare_int\n        | declare_float\n        | declare_string  declare_int : SEQUENCE '=' INT  declare_float : SEQUENCE '=' FLOAT  declare_string : SEQUENCE '=' STRING  operation : L_EVALUATE expression ADD expression R_EVALUATE\n        | L_EVALUATE expression MUL expression R_EVALUATE "
+_lr_signature = "ADD_OP ECHO FLOAT GET_VARIABLE HEADER INT MUL_OP SET_VARIABLE STRING newline programme : statement newline  programme : statement newline programme  statement : affectation  affectation : SET_VARIABLE '=' expression  statement : ECHO expression  expression : GET_VARIABLE  expression : FLOAT\n        | INT\n        | STRING  expression : '$' '(' '(' expression ADD_OP expression ')' ')'\n                    | '$' '(' '(' expression MUL_OP expression ')' ')' "
     
-_lr_action_items = {'ECHO':([0,12,],[9,9,]),'L_EVALUATE':([0,9,10,12,22,23,],[10,10,10,10,10,10,]),'SEQUENCE':([0,12,],[11,11,]),'$end':([1,2,3,4,5,6,7,8,13,14,15,16,17,18,21,24,25,26,29,30,],[0,-1,-3,-4,-5,-12,-13,-14,-6,-7,-8,-9,-10,-11,-2,-15,-16,-17,-18,-19,]),'newline':([2,3,4,5,6,7,8,13,14,15,16,17,18,24,25,26,29,30,],[12,-3,-4,-5,-12,-13,-14,-6,-7,-8,-9,-10,-11,-15,-16,-17,-18,-19,]),'INT':([9,10,20,22,23,],[14,14,24,14,14,]),'FLOAT':([9,10,20,22,23,],[15,15,25,15,15,]),'STRING':([9,10,20,22,23,],[16,16,26,16,16,]),'EVALUATE':([9,10,22,23,],[17,17,17,17,]),'=':([11,],[20,]),'ADD':([14,15,16,17,18,19,29,30,],[-7,-8,-9,-10,-11,22,-18,-19,]),'MUL':([14,15,16,17,18,19,29,30,],[-7,-8,-9,-10,-11,23,-18,-19,]),'R_EVALUATE':([14,15,16,17,18,27,28,29,30,],[-7,-8,-9,-10,-11,29,30,-18,-19,]),}
+_lr_action_items = {'ECHO':([0,6,],[4,4,]),'SET_VARIABLE':([0,6,],[5,5,]),'$end':([1,6,14,],[0,-1,-2,]),'newline':([2,3,7,8,9,10,11,16,25,26,],[6,-3,-5,-6,-7,-8,-9,-4,-10,-11,]),'GET_VARIABLE':([4,13,17,19,20,],[8,8,8,8,8,]),'FLOAT':([4,13,17,19,20,],[9,9,9,9,9,]),'INT':([4,13,17,19,20,],[10,10,10,10,10,]),'STRING':([4,13,17,19,20,],[11,11,11,11,11,]),'$':([4,13,17,19,20,],[12,12,12,12,12,]),'=':([5,],[13,]),'ADD_OP':([8,9,10,11,18,25,26,],[-6,-7,-8,-9,19,-10,-11,]),'MUL_OP':([8,9,10,11,18,25,26,],[-6,-7,-8,-9,20,-10,-11,]),')':([8,9,10,11,21,22,23,24,25,26,],[-6,-7,-8,-9,23,24,25,26,-10,-11,]),'(':([12,15,],[15,17,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'programme':([0,12,],[1,21,]),'statement':([0,12,],[2,2,]),'declaration':([0,12,],[3,3,]),'echo':([0,12,],[4,4,]),'operation':([0,9,10,12,22,23,],[5,18,18,5,18,18,]),'declare_int':([0,12,],[6,6,]),'declare_float':([0,12,],[7,7,]),'declare_string':([0,12,],[8,8,]),'expression':([9,10,22,23,],[13,19,27,28,]),}
+_lr_goto_items = {'programme':([0,6,],[1,14,]),'statement':([0,6,],[2,2,]),'affectation':([0,6,],[3,3,]),'expression':([4,13,17,19,20,],[7,16,18,21,22,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,23 +27,15 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> programme","S'",1,None,None,None),
-  ('programme -> statement','programme',1,'p_programme_statement','parser_bash.py',12),
-  ('programme -> statement newline programme','programme',3,'p_programme_recursive','parser_bash.py',17),
-  ('statement -> declaration','statement',1,'p_statement','parser_bash.py',22),
-  ('statement -> echo','statement',1,'p_statement','parser_bash.py',23),
-  ('statement -> operation','statement',1,'p_statement','parser_bash.py',24),
-  ('echo -> ECHO expression','echo',2,'p_echo','parser_bash.py',29),
-  ('expression -> INT','expression',1,'p_expression_num_or_var','parser_bash.py',34),
-  ('expression -> FLOAT','expression',1,'p_expression_num_or_var','parser_bash.py',35),
-  ('expression -> STRING','expression',1,'p_expression_num_or_var','parser_bash.py',36),
-  ('expression -> EVALUATE','expression',1,'p_expression_num_or_var','parser_bash.py',37),
-  ('expression -> operation','expression',1,'p_expression_num_or_var','parser_bash.py',38),
-  ('declaration -> declare_int','declaration',1,'p_declaration','parser_bash.py',44),
-  ('declaration -> declare_float','declaration',1,'p_declaration','parser_bash.py',45),
-  ('declaration -> declare_string','declaration',1,'p_declaration','parser_bash.py',46),
-  ('declare_int -> SEQUENCE = INT','declare_int',3,'p_declare_int','parser_bash.py',52),
-  ('declare_float -> SEQUENCE = FLOAT','declare_float',3,'p_declare_float','parser_bash.py',57),
-  ('declare_string -> SEQUENCE = STRING','declare_string',3,'p_declare_string','parser_bash.py',62),
-  ('operation -> L_EVALUATE expression ADD expression R_EVALUATE','operation',5,'p_operation','parser_bash.py',66),
-  ('operation -> L_EVALUATE expression MUL expression R_EVALUATE','operation',5,'p_operation','parser_bash.py',67),
+  ('programme -> statement newline','programme',2,'p_programme_statement','parser_bash.py',13),
+  ('programme -> statement newline programme','programme',3,'p_programme_recursive','parser_bash.py',18),
+  ('statement -> affectation','statement',1,'p_statement','parser_bash.py',23),
+  ('affectation -> SET_VARIABLE = expression','affectation',3,'p_statement_affectation','parser_bash.py',28),
+  ('statement -> ECHO expression','statement',2,'p_echo','parser_bash.py',33),
+  ('expression -> GET_VARIABLE','expression',1,'p_expression_var','parser_bash.py',38),
+  ('expression -> FLOAT','expression',1,'p_expression_val','parser_bash.py',43),
+  ('expression -> INT','expression',1,'p_expression_val','parser_bash.py',44),
+  ('expression -> STRING','expression',1,'p_expression_val','parser_bash.py',45),
+  ('expression -> $ ( ( expression ADD_OP expression ) )','expression',8,'p_expression_op','parser_bash.py',55),
+  ('expression -> $ ( ( expression MUL_OP expression ) )','expression',8,'p_expression_op','parser_bash.py',56),
 ]

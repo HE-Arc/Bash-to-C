@@ -7,52 +7,40 @@ Unused terminals:
 Grammar
 
 Rule 0     S' -> programme
-Rule 1     programme -> statement
+Rule 1     programme -> statement newline
 Rule 2     programme -> statement newline programme
-Rule 3     statement -> declaration
-Rule 4     statement -> echo
-Rule 5     statement -> operation
-Rule 6     echo -> ECHO expression
-Rule 7     expression -> INT
-Rule 8     expression -> FLOAT
+Rule 3     statement -> affectation
+Rule 4     affectation -> SET_VARIABLE = expression
+Rule 5     statement -> ECHO expression
+Rule 6     expression -> GET_VARIABLE
+Rule 7     expression -> FLOAT
+Rule 8     expression -> INT
 Rule 9     expression -> STRING
-Rule 10    expression -> EVALUATE
-Rule 11    expression -> operation
-Rule 12    declaration -> declare_int
-Rule 13    declaration -> declare_float
-Rule 14    declaration -> declare_string
-Rule 15    declare_int -> SEQUENCE = INT
-Rule 16    declare_float -> SEQUENCE = FLOAT
-Rule 17    declare_string -> SEQUENCE = STRING
-Rule 18    operation -> L_EVALUATE expression ADD expression R_EVALUATE
-Rule 19    operation -> L_EVALUATE expression MUL expression R_EVALUATE
+Rule 10    expression -> $ ( ( expression ADD_OP expression ) )
+Rule 11    expression -> $ ( ( expression MUL_OP expression ) )
 
 Terminals, with rules where they appear
 
-=                    : 15 16 17
-ADD                  : 18
-ECHO                 : 6
-EVALUATE             : 10
-FLOAT                : 8 16
+$                    : 10 11
+(                    : 10 10 11 11
+)                    : 10 10 11 11
+=                    : 4
+ADD_OP               : 10
+ECHO                 : 5
+FLOAT                : 7
+GET_VARIABLE         : 6
 HEADER               : 
-INT                  : 7 15
-L_EVALUATE           : 18 19
-MUL                  : 19
-R_EVALUATE           : 18 19
-SEQUENCE             : 15 16 17
-STRING               : 9 17
+INT                  : 8
+MUL_OP               : 11
+SET_VARIABLE         : 4
+STRING               : 9
 error                : 
-newline              : 2
+newline              : 1 2
 
 Nonterminals, with rules where they appear
 
-declaration          : 3
-declare_float        : 13
-declare_int          : 12
-declare_string       : 14
-echo                 : 4
-expression           : 6 18 18 19 19
-operation            : 5 11
+affectation          : 3
+expression           : 4 5 10 10 11 11
 programme            : 2 0
 statement            : 1 2
 
@@ -61,33 +49,18 @@ Parsing method: LALR
 state 0
 
     (0) S' -> . programme
-    (1) programme -> . statement
+    (1) programme -> . statement newline
     (2) programme -> . statement newline programme
-    (3) statement -> . declaration
-    (4) statement -> . echo
-    (5) statement -> . operation
-    (12) declaration -> . declare_int
-    (13) declaration -> . declare_float
-    (14) declaration -> . declare_string
-    (6) echo -> . ECHO expression
-    (18) operation -> . L_EVALUATE expression ADD expression R_EVALUATE
-    (19) operation -> . L_EVALUATE expression MUL expression R_EVALUATE
-    (15) declare_int -> . SEQUENCE = INT
-    (16) declare_float -> . SEQUENCE = FLOAT
-    (17) declare_string -> . SEQUENCE = STRING
+    (3) statement -> . affectation
+    (5) statement -> . ECHO expression
+    (4) affectation -> . SET_VARIABLE = expression
 
-    ECHO            shift and go to state 9
-    L_EVALUATE      shift and go to state 10
-    SEQUENCE        shift and go to state 11
+    ECHO            shift and go to state 4
+    SET_VARIABLE    shift and go to state 5
 
     programme                      shift and go to state 1
     statement                      shift and go to state 2
-    declaration                    shift and go to state 3
-    echo                           shift and go to state 4
-    operation                      shift and go to state 5
-    declare_int                    shift and go to state 6
-    declare_float                  shift and go to state 7
-    declare_string                 shift and go to state 8
+    affectation                    shift and go to state 3
 
 state 1
 
@@ -97,328 +70,265 @@ state 1
 
 state 2
 
-    (1) programme -> statement .
+    (1) programme -> statement . newline
     (2) programme -> statement . newline programme
 
-    $end            reduce using rule 1 (programme -> statement .)
-    newline         shift and go to state 12
+    newline         shift and go to state 6
 
 
 state 3
 
-    (3) statement -> declaration .
+    (3) statement -> affectation .
 
-    newline         reduce using rule 3 (statement -> declaration .)
-    $end            reduce using rule 3 (statement -> declaration .)
+    newline         reduce using rule 3 (statement -> affectation .)
 
 
 state 4
 
-    (4) statement -> echo .
+    (5) statement -> ECHO . expression
+    (6) expression -> . GET_VARIABLE
+    (7) expression -> . FLOAT
+    (8) expression -> . INT
+    (9) expression -> . STRING
+    (10) expression -> . $ ( ( expression ADD_OP expression ) )
+    (11) expression -> . $ ( ( expression MUL_OP expression ) )
 
-    newline         reduce using rule 4 (statement -> echo .)
-    $end            reduce using rule 4 (statement -> echo .)
+    GET_VARIABLE    shift and go to state 8
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    STRING          shift and go to state 11
+    $               shift and go to state 12
 
+    expression                     shift and go to state 7
 
 state 5
 
-    (5) statement -> operation .
+    (4) affectation -> SET_VARIABLE . = expression
 
-    newline         reduce using rule 5 (statement -> operation .)
-    $end            reduce using rule 5 (statement -> operation .)
+    =               shift and go to state 13
 
 
 state 6
 
-    (12) declaration -> declare_int .
+    (1) programme -> statement newline .
+    (2) programme -> statement newline . programme
+    (1) programme -> . statement newline
+    (2) programme -> . statement newline programme
+    (3) statement -> . affectation
+    (5) statement -> . ECHO expression
+    (4) affectation -> . SET_VARIABLE = expression
 
-    newline         reduce using rule 12 (declaration -> declare_int .)
-    $end            reduce using rule 12 (declaration -> declare_int .)
+    $end            reduce using rule 1 (programme -> statement newline .)
+    ECHO            shift and go to state 4
+    SET_VARIABLE    shift and go to state 5
 
+    statement                      shift and go to state 2
+    programme                      shift and go to state 14
+    affectation                    shift and go to state 3
 
 state 7
 
-    (13) declaration -> declare_float .
+    (5) statement -> ECHO expression .
 
-    newline         reduce using rule 13 (declaration -> declare_float .)
-    $end            reduce using rule 13 (declaration -> declare_float .)
+    newline         reduce using rule 5 (statement -> ECHO expression .)
 
 
 state 8
 
-    (14) declaration -> declare_string .
+    (6) expression -> GET_VARIABLE .
 
-    newline         reduce using rule 14 (declaration -> declare_string .)
-    $end            reduce using rule 14 (declaration -> declare_string .)
+    newline         reduce using rule 6 (expression -> GET_VARIABLE .)
+    ADD_OP          reduce using rule 6 (expression -> GET_VARIABLE .)
+    MUL_OP          reduce using rule 6 (expression -> GET_VARIABLE .)
+    )               reduce using rule 6 (expression -> GET_VARIABLE .)
 
 
 state 9
 
-    (6) echo -> ECHO . expression
-    (7) expression -> . INT
-    (8) expression -> . FLOAT
-    (9) expression -> . STRING
-    (10) expression -> . EVALUATE
-    (11) expression -> . operation
-    (18) operation -> . L_EVALUATE expression ADD expression R_EVALUATE
-    (19) operation -> . L_EVALUATE expression MUL expression R_EVALUATE
+    (7) expression -> FLOAT .
 
-    INT             shift and go to state 14
-    FLOAT           shift and go to state 15
-    STRING          shift and go to state 16
-    EVALUATE        shift and go to state 17
-    L_EVALUATE      shift and go to state 10
+    newline         reduce using rule 7 (expression -> FLOAT .)
+    ADD_OP          reduce using rule 7 (expression -> FLOAT .)
+    MUL_OP          reduce using rule 7 (expression -> FLOAT .)
+    )               reduce using rule 7 (expression -> FLOAT .)
 
-    expression                     shift and go to state 13
-    operation                      shift and go to state 18
 
 state 10
 
-    (18) operation -> L_EVALUATE . expression ADD expression R_EVALUATE
-    (19) operation -> L_EVALUATE . expression MUL expression R_EVALUATE
-    (7) expression -> . INT
-    (8) expression -> . FLOAT
-    (9) expression -> . STRING
-    (10) expression -> . EVALUATE
-    (11) expression -> . operation
-    (18) operation -> . L_EVALUATE expression ADD expression R_EVALUATE
-    (19) operation -> . L_EVALUATE expression MUL expression R_EVALUATE
+    (8) expression -> INT .
 
-    INT             shift and go to state 14
-    FLOAT           shift and go to state 15
-    STRING          shift and go to state 16
-    EVALUATE        shift and go to state 17
-    L_EVALUATE      shift and go to state 10
+    newline         reduce using rule 8 (expression -> INT .)
+    ADD_OP          reduce using rule 8 (expression -> INT .)
+    MUL_OP          reduce using rule 8 (expression -> INT .)
+    )               reduce using rule 8 (expression -> INT .)
 
-    expression                     shift and go to state 19
-    operation                      shift and go to state 18
 
 state 11
-
-    (15) declare_int -> SEQUENCE . = INT
-    (16) declare_float -> SEQUENCE . = FLOAT
-    (17) declare_string -> SEQUENCE . = STRING
-
-    =               shift and go to state 20
-
-
-state 12
-
-    (2) programme -> statement newline . programme
-    (1) programme -> . statement
-    (2) programme -> . statement newline programme
-    (3) statement -> . declaration
-    (4) statement -> . echo
-    (5) statement -> . operation
-    (12) declaration -> . declare_int
-    (13) declaration -> . declare_float
-    (14) declaration -> . declare_string
-    (6) echo -> . ECHO expression
-    (18) operation -> . L_EVALUATE expression ADD expression R_EVALUATE
-    (19) operation -> . L_EVALUATE expression MUL expression R_EVALUATE
-    (15) declare_int -> . SEQUENCE = INT
-    (16) declare_float -> . SEQUENCE = FLOAT
-    (17) declare_string -> . SEQUENCE = STRING
-
-    ECHO            shift and go to state 9
-    L_EVALUATE      shift and go to state 10
-    SEQUENCE        shift and go to state 11
-
-    statement                      shift and go to state 2
-    programme                      shift and go to state 21
-    declaration                    shift and go to state 3
-    echo                           shift and go to state 4
-    operation                      shift and go to state 5
-    declare_int                    shift and go to state 6
-    declare_float                  shift and go to state 7
-    declare_string                 shift and go to state 8
-
-state 13
-
-    (6) echo -> ECHO expression .
-
-    newline         reduce using rule 6 (echo -> ECHO expression .)
-    $end            reduce using rule 6 (echo -> ECHO expression .)
-
-
-state 14
-
-    (7) expression -> INT .
-
-    newline         reduce using rule 7 (expression -> INT .)
-    $end            reduce using rule 7 (expression -> INT .)
-    ADD             reduce using rule 7 (expression -> INT .)
-    MUL             reduce using rule 7 (expression -> INT .)
-    R_EVALUATE      reduce using rule 7 (expression -> INT .)
-
-
-state 15
-
-    (8) expression -> FLOAT .
-
-    newline         reduce using rule 8 (expression -> FLOAT .)
-    $end            reduce using rule 8 (expression -> FLOAT .)
-    ADD             reduce using rule 8 (expression -> FLOAT .)
-    MUL             reduce using rule 8 (expression -> FLOAT .)
-    R_EVALUATE      reduce using rule 8 (expression -> FLOAT .)
-
-
-state 16
 
     (9) expression -> STRING .
 
     newline         reduce using rule 9 (expression -> STRING .)
-    $end            reduce using rule 9 (expression -> STRING .)
-    ADD             reduce using rule 9 (expression -> STRING .)
-    MUL             reduce using rule 9 (expression -> STRING .)
-    R_EVALUATE      reduce using rule 9 (expression -> STRING .)
+    ADD_OP          reduce using rule 9 (expression -> STRING .)
+    MUL_OP          reduce using rule 9 (expression -> STRING .)
+    )               reduce using rule 9 (expression -> STRING .)
 
 
-state 17
+state 12
 
-    (10) expression -> EVALUATE .
+    (10) expression -> $ . ( ( expression ADD_OP expression ) )
+    (11) expression -> $ . ( ( expression MUL_OP expression ) )
 
-    newline         reduce using rule 10 (expression -> EVALUATE .)
-    $end            reduce using rule 10 (expression -> EVALUATE .)
-    ADD             reduce using rule 10 (expression -> EVALUATE .)
-    MUL             reduce using rule 10 (expression -> EVALUATE .)
-    R_EVALUATE      reduce using rule 10 (expression -> EVALUATE .)
+    (               shift and go to state 15
 
 
-state 18
+state 13
 
-    (11) expression -> operation .
+    (4) affectation -> SET_VARIABLE = . expression
+    (6) expression -> . GET_VARIABLE
+    (7) expression -> . FLOAT
+    (8) expression -> . INT
+    (9) expression -> . STRING
+    (10) expression -> . $ ( ( expression ADD_OP expression ) )
+    (11) expression -> . $ ( ( expression MUL_OP expression ) )
 
-    newline         reduce using rule 11 (expression -> operation .)
-    $end            reduce using rule 11 (expression -> operation .)
-    ADD             reduce using rule 11 (expression -> operation .)
-    MUL             reduce using rule 11 (expression -> operation .)
-    R_EVALUATE      reduce using rule 11 (expression -> operation .)
+    GET_VARIABLE    shift and go to state 8
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    STRING          shift and go to state 11
+    $               shift and go to state 12
 
+    expression                     shift and go to state 16
 
-state 19
-
-    (18) operation -> L_EVALUATE expression . ADD expression R_EVALUATE
-    (19) operation -> L_EVALUATE expression . MUL expression R_EVALUATE
-
-    ADD             shift and go to state 22
-    MUL             shift and go to state 23
-
-
-state 20
-
-    (15) declare_int -> SEQUENCE = . INT
-    (16) declare_float -> SEQUENCE = . FLOAT
-    (17) declare_string -> SEQUENCE = . STRING
-
-    INT             shift and go to state 24
-    FLOAT           shift and go to state 25
-    STRING          shift and go to state 26
-
-
-state 21
+state 14
 
     (2) programme -> statement newline programme .
 
     $end            reduce using rule 2 (programme -> statement newline programme .)
 
 
+state 15
+
+    (10) expression -> $ ( . ( expression ADD_OP expression ) )
+    (11) expression -> $ ( . ( expression MUL_OP expression ) )
+
+    (               shift and go to state 17
+
+
+state 16
+
+    (4) affectation -> SET_VARIABLE = expression .
+
+    newline         reduce using rule 4 (affectation -> SET_VARIABLE = expression .)
+
+
+state 17
+
+    (10) expression -> $ ( ( . expression ADD_OP expression ) )
+    (11) expression -> $ ( ( . expression MUL_OP expression ) )
+    (6) expression -> . GET_VARIABLE
+    (7) expression -> . FLOAT
+    (8) expression -> . INT
+    (9) expression -> . STRING
+    (10) expression -> . $ ( ( expression ADD_OP expression ) )
+    (11) expression -> . $ ( ( expression MUL_OP expression ) )
+
+    GET_VARIABLE    shift and go to state 8
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    STRING          shift and go to state 11
+    $               shift and go to state 12
+
+    expression                     shift and go to state 18
+
+state 18
+
+    (10) expression -> $ ( ( expression . ADD_OP expression ) )
+    (11) expression -> $ ( ( expression . MUL_OP expression ) )
+
+    ADD_OP          shift and go to state 19
+    MUL_OP          shift and go to state 20
+
+
+state 19
+
+    (10) expression -> $ ( ( expression ADD_OP . expression ) )
+    (6) expression -> . GET_VARIABLE
+    (7) expression -> . FLOAT
+    (8) expression -> . INT
+    (9) expression -> . STRING
+    (10) expression -> . $ ( ( expression ADD_OP expression ) )
+    (11) expression -> . $ ( ( expression MUL_OP expression ) )
+
+    GET_VARIABLE    shift and go to state 8
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    STRING          shift and go to state 11
+    $               shift and go to state 12
+
+    expression                     shift and go to state 21
+
+state 20
+
+    (11) expression -> $ ( ( expression MUL_OP . expression ) )
+    (6) expression -> . GET_VARIABLE
+    (7) expression -> . FLOAT
+    (8) expression -> . INT
+    (9) expression -> . STRING
+    (10) expression -> . $ ( ( expression ADD_OP expression ) )
+    (11) expression -> . $ ( ( expression MUL_OP expression ) )
+
+    GET_VARIABLE    shift and go to state 8
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    STRING          shift and go to state 11
+    $               shift and go to state 12
+
+    expression                     shift and go to state 22
+
+state 21
+
+    (10) expression -> $ ( ( expression ADD_OP expression . ) )
+
+    )               shift and go to state 23
+
+
 state 22
 
-    (18) operation -> L_EVALUATE expression ADD . expression R_EVALUATE
-    (7) expression -> . INT
-    (8) expression -> . FLOAT
-    (9) expression -> . STRING
-    (10) expression -> . EVALUATE
-    (11) expression -> . operation
-    (18) operation -> . L_EVALUATE expression ADD expression R_EVALUATE
-    (19) operation -> . L_EVALUATE expression MUL expression R_EVALUATE
+    (11) expression -> $ ( ( expression MUL_OP expression . ) )
 
-    INT             shift and go to state 14
-    FLOAT           shift and go to state 15
-    STRING          shift and go to state 16
-    EVALUATE        shift and go to state 17
-    L_EVALUATE      shift and go to state 10
+    )               shift and go to state 24
 
-    expression                     shift and go to state 27
-    operation                      shift and go to state 18
 
 state 23
 
-    (19) operation -> L_EVALUATE expression MUL . expression R_EVALUATE
-    (7) expression -> . INT
-    (8) expression -> . FLOAT
-    (9) expression -> . STRING
-    (10) expression -> . EVALUATE
-    (11) expression -> . operation
-    (18) operation -> . L_EVALUATE expression ADD expression R_EVALUATE
-    (19) operation -> . L_EVALUATE expression MUL expression R_EVALUATE
+    (10) expression -> $ ( ( expression ADD_OP expression ) . )
 
-    INT             shift and go to state 14
-    FLOAT           shift and go to state 15
-    STRING          shift and go to state 16
-    EVALUATE        shift and go to state 17
-    L_EVALUATE      shift and go to state 10
+    )               shift and go to state 25
 
-    expression                     shift and go to state 28
-    operation                      shift and go to state 18
 
 state 24
 
-    (15) declare_int -> SEQUENCE = INT .
+    (11) expression -> $ ( ( expression MUL_OP expression ) . )
 
-    newline         reduce using rule 15 (declare_int -> SEQUENCE = INT .)
-    $end            reduce using rule 15 (declare_int -> SEQUENCE = INT .)
+    )               shift and go to state 26
 
 
 state 25
 
-    (16) declare_float -> SEQUENCE = FLOAT .
+    (10) expression -> $ ( ( expression ADD_OP expression ) ) .
 
-    newline         reduce using rule 16 (declare_float -> SEQUENCE = FLOAT .)
-    $end            reduce using rule 16 (declare_float -> SEQUENCE = FLOAT .)
+    newline         reduce using rule 10 (expression -> $ ( ( expression ADD_OP expression ) ) .)
+    ADD_OP          reduce using rule 10 (expression -> $ ( ( expression ADD_OP expression ) ) .)
+    MUL_OP          reduce using rule 10 (expression -> $ ( ( expression ADD_OP expression ) ) .)
+    )               reduce using rule 10 (expression -> $ ( ( expression ADD_OP expression ) ) .)
 
 
 state 26
 
-    (17) declare_string -> SEQUENCE = STRING .
+    (11) expression -> $ ( ( expression MUL_OP expression ) ) .
 
-    newline         reduce using rule 17 (declare_string -> SEQUENCE = STRING .)
-    $end            reduce using rule 17 (declare_string -> SEQUENCE = STRING .)
-
-
-state 27
-
-    (18) operation -> L_EVALUATE expression ADD expression . R_EVALUATE
-
-    R_EVALUATE      shift and go to state 29
-
-
-state 28
-
-    (19) operation -> L_EVALUATE expression MUL expression . R_EVALUATE
-
-    R_EVALUATE      shift and go to state 30
-
-
-state 29
-
-    (18) operation -> L_EVALUATE expression ADD expression R_EVALUATE .
-
-    newline         reduce using rule 18 (operation -> L_EVALUATE expression ADD expression R_EVALUATE .)
-    $end            reduce using rule 18 (operation -> L_EVALUATE expression ADD expression R_EVALUATE .)
-    ADD             reduce using rule 18 (operation -> L_EVALUATE expression ADD expression R_EVALUATE .)
-    MUL             reduce using rule 18 (operation -> L_EVALUATE expression ADD expression R_EVALUATE .)
-    R_EVALUATE      reduce using rule 18 (operation -> L_EVALUATE expression ADD expression R_EVALUATE .)
-
-
-state 30
-
-    (19) operation -> L_EVALUATE expression MUL expression R_EVALUATE .
-
-    newline         reduce using rule 19 (operation -> L_EVALUATE expression MUL expression R_EVALUATE .)
-    $end            reduce using rule 19 (operation -> L_EVALUATE expression MUL expression R_EVALUATE .)
-    ADD             reduce using rule 19 (operation -> L_EVALUATE expression MUL expression R_EVALUATE .)
-    MUL             reduce using rule 19 (operation -> L_EVALUATE expression MUL expression R_EVALUATE .)
-    R_EVALUATE      reduce using rule 19 (operation -> L_EVALUATE expression MUL expression R_EVALUATE .)
+    newline         reduce using rule 11 (expression -> $ ( ( expression MUL_OP expression ) ) .)
+    ADD_OP          reduce using rule 11 (expression -> $ ( ( expression MUL_OP expression ) ) .)
+    MUL_OP          reduce using rule 11 (expression -> $ ( ( expression MUL_OP expression ) ) .)
+    )               reduce using rule 11 (expression -> $ ( ( expression MUL_OP expression ) ) .)
 
