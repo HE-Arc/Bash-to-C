@@ -14,11 +14,13 @@ def thread(self, lastNode):
     exitIfNode = self.children[0].thread(lastNode)
     exitIfNode.addNext(self)
     exitBodyIfNode = self.children[1].thread(self)
+    # Check for ELSE
     try:
         exitBodyElseNode = self.children[2].thread(self)
         exitBodyElseNode.addNext(self)
     except:
-        exitBodyIfNode.addNext(self)
+        None
+    exitBodyIfNode.addNext(self)
     return self
 
 
