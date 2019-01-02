@@ -1,5 +1,6 @@
 x=5
 y=10
+
 add=$(($x + $y))
 echo "$x + $y = $add"
 sub=$(($y - $x))
