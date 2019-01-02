@@ -7,7 +7,9 @@ from lex import tokens
 import AST
 from tools import *
 
+
 vars = {}
+
 
 def p_programme_statement(p):
     ''' programme : statement newline '''
@@ -57,6 +59,22 @@ def p_expression_op(p):
     p[0] = AST.OpNode(p[5], [p[4], p[6]])
 
 
+def p_expression_cmp(p):
+    ''' expression : expression EQ_CMP expression
+                    |  expression NE_CMP expression '''
+    p[0] = AST.OpNode(p[2], [p[1], p[3]])
+
+
+def p_condition_if(p):
+    ''' statement : IF '[' expression ']' newline THEN newline programme FI '''
+    p[0] = AST.CondNode([p[3], p[8]])
+
+
+def p_condition_if_else(p):
+    ''' statement : IF '[' expression ']' newline THEN newline programme ELSE newline programme FI '''
+    p[0] = AST.CondNode([p[3], p[8], p[11]])
+
+
 def p_error(p):
     if p:
         print('Syntax error in line %d' % p.lineno)
@@ -71,6 +89,7 @@ def parse(program):
 
 
 yacc.yacc(outputdir='generated')
+
 
 if __name__ == '__main__':
     import sys
