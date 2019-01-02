@@ -1,14 +1,11 @@
-a=1
-b=1
-
-if [$(($a + $b)) -ne 3]
+if [1 -ne 3]
 then
-  echo "a and c not equals !"
+  echo "a and c are not equal !"
 fi
 
-if [$a -eq $b]
+if [2 -eq 2]
 then
-  echo "Equal !"
+  echo "a and b are equal !"
 else
-  echo "Not equal !"
+  echo "a and c are not equal !"
 fi
