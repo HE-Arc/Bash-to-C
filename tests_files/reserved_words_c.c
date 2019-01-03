@@ -3,5 +3,5 @@
 int main()
 {
 	char var_case[] = "i'm a case";
-	printf(var_case);
+	printf("%s",var_case);
 }
