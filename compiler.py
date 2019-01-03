@@ -12,6 +12,11 @@ Create the basic c structure
 # Dictionnaire comportant les variables du programme, sous cette forme: {NOM_VAR:[TYPE, VALEUR], ...}
 vars = dict()
 
+class VarType:
+	INT = "int"
+	FLOAT = "float"
+	STRING = "char"
+
 # noeud de programme
 # retourne la suite d'opcodes de tous les enfants
 @addToClass(AST.ProgramNode)
@@ -71,28 +76,28 @@ def compile(self):
 	var_name = self.children[0].tok;
 	affectation_node = self.children[1]
 	affectation = affectation_node.compile();
-
-	# Dans le cas où la variable n'existe pas, on déclare le type
 	if var_name not in vars:
 		if isinstance(affectation_node, AST.IntNode):
+			vars[var_name] = [VarType.INT, affectation]
 			c_code += f"int {var_name}";
 		elif isinstance(affectation_node, AST.FloatNode):
+			vars[var_name] = [VarType.FLOAT, affectation]
 			c_code += f"float {var_name}";
 		elif isinstance(affectation_node, AST.StringNode):
+			vars[var_name] = [VarType.STRING, affectation]
 			c_code += f"char {var_name}[]";
 		elif isinstance(affectation_node, AST.OpNode):
+			vars[var_name] = [VarType.FLOAT, affectation]
 			c_code += f"float {var_name}";
-		else:
-			c_code += f"char {var_name}[]";
+		elif isinstance(affectation_node, AST.VariableNode):
+			vars[var_name] = [vars[affectation][0], affectation]
+			c_code += f"{vars[affectation][0]} "
+			c_code += f"{var_name}";
+			if vars[affectation][0] == VarType.STRING:
+				c_code += "[]"
 
 	# Ecrit le code correspondant à une assignation
 	c_code += f" = {affectation};\n"
-
-	# Ajoute la nouvelle variable dans le dictionnaire
-	if isinstance(self.children[1], AST.VariableNode):
-		vars[var_name] = vars[affectation_node.tok[1::]][1]
-	else:
-		vars[var_name] = affectation
 
 	return c_code
 
