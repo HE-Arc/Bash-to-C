@@ -119,7 +119,7 @@ def compile(self):
 	return c_code
 
 def convert_string_variables(str):
-	regex = re.compile("\$[A-Za-z_]{1}[A-Za-z0-9]*")
+	regex = re.compile("\$[A-Za-z_]{1}[A-Za-z0-9_]*")
 	result = regex.findall(str)
 	replace_list = []
 

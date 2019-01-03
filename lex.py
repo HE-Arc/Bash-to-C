@@ -72,7 +72,7 @@ def t_STRING(t):
 
 
 def t_GET_VARIABLE(t):
-	r'\$[A-Za-z_]{1}[A-Za-z0-9]*'
+	r'\$[A-Za-z_]{1}[A-Za-z0-9_]*'
 	#print(f"----- t: {t} ----")
 	if t.value[1::] in reserved_words_c:
 		t.value = '$var_' + t.value[1::]
