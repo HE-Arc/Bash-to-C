@@ -186,6 +186,13 @@ def compile(self):
 	c_code += f"{self.children[1].compile()}\n"
 	return c_code
 
+@addToClass(AST.UntilNode)
+def compile(self):
+	c_code = ""
+	c_code += f"while(!({self.children[0].compile()}))"
+	c_code += f"{self.children[1].compile()}\n"
+	return c_code
+
 if __name__ == "__main__":
 	from parser_bash import parse
 	import sys, os

@@ -33,6 +33,15 @@ def thread(self, lastNode):
     exitBody.addNext(beforeCond.next[-1])
     return self
 
+@addToClass(AST.UntilNode)
+def thread(self, lastNode):
+    beforeCond = lastNode
+    exitCond = self.children[0].thread(lastNode)
+    exitCond.addNext(self)
+    exitBody = self.children[1].thread(self)
+    exitBody.addNext(beforeCond.next[-1])
+    return self
+
 
 def thread(tree):
     entry = AST.EntryNode()

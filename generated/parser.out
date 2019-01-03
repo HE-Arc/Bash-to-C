@@ -26,17 +26,18 @@ Rule 16    block -> statement newline block
 Rule 17    statement -> IF [ expression ] newline THEN newline block FI
 Rule 18    statement -> IF [ expression ] newline THEN newline block ELSE newline block FI
 Rule 19    statement -> WHILE [ expression ] ; DO newline block DONE
+Rule 20    statement -> UNTIL [ expression ] ; DO newline block DONE
 
 Terminals, with rules where they appear
 
 $                    : 10 11
 (                    : 10 10 11 11
 )                    : 10 10 11 11
-;                    : 19
+;                    : 19 20
 =                    : 4
 ADD_OP               : 10
-DO                   : 19
-DONE                 : 19
+DO                   : 19 20
+DONE                 : 19 20
 ECHO                 : 5
 ELSE                 : 18
 EQ_CMP               : 12
@@ -52,17 +53,18 @@ NE_CMP               : 13
 SET_VARIABLE         : 4
 STRING               : 9
 THEN                 : 17 18
+UNTIL                : 20
 WHILE                : 19
-[                    : 17 18 19
-]                    : 17 18 19
+[                    : 17 18 19 20
+]                    : 17 18 19 20
 error                : 
-newline              : 1 2 15 16 17 17 18 18 18 19
+newline              : 1 2 15 16 17 17 18 18 18 19 20
 
 Nonterminals, with rules where they appear
 
 affectation          : 3
-block                : 16 17 18 18 19
-expression           : 4 5 10 10 11 11 12 12 13 13 14 14 17 18 19
+block                : 16 17 18 18 19 20
+expression           : 4 5 10 10 11 11 12 12 13 13 14 14 17 18 19 20
 programme            : 2 0
 statement            : 1 2 15 16
 
@@ -78,12 +80,14 @@ state 0
     (17) statement -> . IF [ expression ] newline THEN newline block FI
     (18) statement -> . IF [ expression ] newline THEN newline block ELSE newline block FI
     (19) statement -> . WHILE [ expression ] ; DO newline block DONE
+    (20) statement -> . UNTIL [ expression ] ; DO newline block DONE
     (4) affectation -> . SET_VARIABLE = expression
 
     ECHO            shift and go to state 4
     IF              shift and go to state 5
     WHILE           shift and go to state 6
-    SET_VARIABLE    shift and go to state 7
+    UNTIL           shift and go to state 7
+    SET_VARIABLE    shift and go to state 8
 
     programme                      shift and go to state 1
     statement                      shift and go to state 2
@@ -100,7 +104,7 @@ state 2
     (1) programme -> statement . newline
     (2) programme -> statement . newline programme
 
-    newline         shift and go to state 8
+    newline         shift and go to state 9
 
 
 state 3
@@ -123,37 +127,44 @@ state 4
     (13) expression -> . expression NE_CMP expression
     (14) expression -> . expression LT_CMP expression
 
-    GET_VARIABLE    shift and go to state 10
-    FLOAT           shift and go to state 11
-    INT             shift and go to state 12
-    STRING          shift and go to state 13
-    $               shift and go to state 14
+    GET_VARIABLE    shift and go to state 11
+    FLOAT           shift and go to state 12
+    INT             shift and go to state 13
+    STRING          shift and go to state 14
+    $               shift and go to state 15
 
-    expression                     shift and go to state 9
+    expression                     shift and go to state 10
 
 state 5
 
     (17) statement -> IF . [ expression ] newline THEN newline block FI
     (18) statement -> IF . [ expression ] newline THEN newline block ELSE newline block FI
 
-    [               shift and go to state 15
+    [               shift and go to state 16
 
 
 state 6
 
     (19) statement -> WHILE . [ expression ] ; DO newline block DONE
 
-    [               shift and go to state 16
+    [               shift and go to state 17
 
 
 state 7
 
-    (4) affectation -> SET_VARIABLE . = expression
+    (20) statement -> UNTIL . [ expression ] ; DO newline block DONE
 
-    =               shift and go to state 17
+    [               shift and go to state 18
 
 
 state 8
+
+    (4) affectation -> SET_VARIABLE . = expression
+
+    =               shift and go to state 19
+
+
+state 9
 
     (1) programme -> statement newline .
     (2) programme -> statement newline . programme
@@ -164,19 +175,21 @@ state 8
     (17) statement -> . IF [ expression ] newline THEN newline block FI
     (18) statement -> . IF [ expression ] newline THEN newline block ELSE newline block FI
     (19) statement -> . WHILE [ expression ] ; DO newline block DONE
+    (20) statement -> . UNTIL [ expression ] ; DO newline block DONE
     (4) affectation -> . SET_VARIABLE = expression
 
     $end            reduce using rule 1 (programme -> statement newline .)
     ECHO            shift and go to state 4
     IF              shift and go to state 5
     WHILE           shift and go to state 6
-    SET_VARIABLE    shift and go to state 7
+    UNTIL           shift and go to state 7
+    SET_VARIABLE    shift and go to state 8
 
     statement                      shift and go to state 2
-    programme                      shift and go to state 18
+    programme                      shift and go to state 20
     affectation                    shift and go to state 3
 
-state 9
+state 10
 
     (5) statement -> ECHO expression .
     (12) expression -> expression . EQ_CMP expression
@@ -184,12 +197,12 @@ state 9
     (14) expression -> expression . LT_CMP expression
 
     newline         reduce using rule 5 (statement -> ECHO expression .)
-    EQ_CMP          shift and go to state 19
-    NE_CMP          shift and go to state 20
-    LT_CMP          shift and go to state 21
+    EQ_CMP          shift and go to state 21
+    NE_CMP          shift and go to state 22
+    LT_CMP          shift and go to state 23
 
 
-state 10
+state 11
 
     (6) expression -> GET_VARIABLE .
 
@@ -203,7 +216,7 @@ state 10
     )               reduce using rule 6 (expression -> GET_VARIABLE .)
 
 
-state 11
+state 12
 
     (7) expression -> FLOAT .
 
@@ -217,7 +230,7 @@ state 11
     )               reduce using rule 7 (expression -> FLOAT .)
 
 
-state 12
+state 13
 
     (8) expression -> INT .
 
@@ -231,7 +244,7 @@ state 12
     )               reduce using rule 8 (expression -> INT .)
 
 
-state 13
+state 14
 
     (9) expression -> STRING .
 
@@ -245,15 +258,15 @@ state 13
     )               reduce using rule 9 (expression -> STRING .)
 
 
-state 14
+state 15
 
     (10) expression -> $ . ( ( expression ADD_OP expression ) )
     (11) expression -> $ . ( ( expression MUL_OP expression ) )
 
-    (               shift and go to state 22
+    (               shift and go to state 24
 
 
-state 15
+state 16
 
     (17) statement -> IF [ . expression ] newline THEN newline block FI
     (18) statement -> IF [ . expression ] newline THEN newline block ELSE newline block FI
@@ -267,15 +280,15 @@ state 15
     (13) expression -> . expression NE_CMP expression
     (14) expression -> . expression LT_CMP expression
 
-    GET_VARIABLE    shift and go to state 10
-    FLOAT           shift and go to state 11
-    INT             shift and go to state 12
-    STRING          shift and go to state 13
-    $               shift and go to state 14
+    GET_VARIABLE    shift and go to state 11
+    FLOAT           shift and go to state 12
+    INT             shift and go to state 13
+    STRING          shift and go to state 14
+    $               shift and go to state 15
 
-    expression                     shift and go to state 23
+    expression                     shift and go to state 25
 
-state 16
+state 17
 
     (19) statement -> WHILE [ . expression ] ; DO newline block DONE
     (6) expression -> . GET_VARIABLE
@@ -288,15 +301,36 @@ state 16
     (13) expression -> . expression NE_CMP expression
     (14) expression -> . expression LT_CMP expression
 
-    GET_VARIABLE    shift and go to state 10
-    FLOAT           shift and go to state 11
-    INT             shift and go to state 12
-    STRING          shift and go to state 13
-    $               shift and go to state 14
+    GET_VARIABLE    shift and go to state 11
+    FLOAT           shift and go to state 12
+    INT             shift and go to state 13
+    STRING          shift and go to state 14
+    $               shift and go to state 15
 
-    expression                     shift and go to state 24
+    expression                     shift and go to state 26
 
-state 17
+state 18
+
+    (20) statement -> UNTIL [ . expression ] ; DO newline block DONE
+    (6) expression -> . GET_VARIABLE
+    (7) expression -> . FLOAT
+    (8) expression -> . INT
+    (9) expression -> . STRING
+    (10) expression -> . $ ( ( expression ADD_OP expression ) )
+    (11) expression -> . $ ( ( expression MUL_OP expression ) )
+    (12) expression -> . expression EQ_CMP expression
+    (13) expression -> . expression NE_CMP expression
+    (14) expression -> . expression LT_CMP expression
+
+    GET_VARIABLE    shift and go to state 11
+    FLOAT           shift and go to state 12
+    INT             shift and go to state 13
+    STRING          shift and go to state 14
+    $               shift and go to state 15
+
+    expression                     shift and go to state 27
+
+state 19
 
     (4) affectation -> SET_VARIABLE = . expression
     (6) expression -> . GET_VARIABLE
@@ -309,22 +343,22 @@ state 17
     (13) expression -> . expression NE_CMP expression
     (14) expression -> . expression LT_CMP expression
 
-    GET_VARIABLE    shift and go to state 10
-    FLOAT           shift and go to state 11
-    INT             shift and go to state 12
-    STRING          shift and go to state 13
-    $               shift and go to state 14
+    GET_VARIABLE    shift and go to state 11
+    FLOAT           shift and go to state 12
+    INT             shift and go to state 13
+    STRING          shift and go to state 14
+    $               shift and go to state 15
 
-    expression                     shift and go to state 25
+    expression                     shift and go to state 28
 
-state 18
+state 20
 
     (2) programme -> statement newline programme .
 
     $end            reduce using rule 2 (programme -> statement newline programme .)
 
 
-state 19
+state 21
 
     (12) expression -> expression EQ_CMP . expression
     (6) expression -> . GET_VARIABLE
@@ -337,15 +371,15 @@ state 19
     (13) expression -> . expression NE_CMP expression
     (14) expression -> . expression LT_CMP expression
 
-    GET_VARIABLE    shift and go to state 10
-    FLOAT           shift and go to state 11
-    INT             shift and go to state 12
-    STRING          shift and go to state 13
-    $               shift and go to state 14
+    GET_VARIABLE    shift and go to state 11
+    FLOAT           shift and go to state 12
+    INT             shift and go to state 13
+    STRING          shift and go to state 14
+    $               shift and go to state 15
 
-    expression                     shift and go to state 26
+    expression                     shift and go to state 29
 
-state 20
+state 22
 
     (13) expression -> expression NE_CMP . expression
     (6) expression -> . GET_VARIABLE
@@ -358,15 +392,15 @@ state 20
     (13) expression -> . expression NE_CMP expression
     (14) expression -> . expression LT_CMP expression
 
-    GET_VARIABLE    shift and go to state 10
-    FLOAT           shift and go to state 11
-    INT             shift and go to state 12
-    STRING          shift and go to state 13
-    $               shift and go to state 14
+    GET_VARIABLE    shift and go to state 11
+    FLOAT           shift and go to state 12
+    INT             shift and go to state 13
+    STRING          shift and go to state 14
+    $               shift and go to state 15
 
-    expression                     shift and go to state 27
+    expression                     shift and go to state 30
 
-state 21
+state 23
 
     (14) expression -> expression LT_CMP . expression
     (6) expression -> . GET_VARIABLE
@@ -379,23 +413,23 @@ state 21
     (13) expression -> . expression NE_CMP expression
     (14) expression -> . expression LT_CMP expression
 
-    GET_VARIABLE    shift and go to state 10
-    FLOAT           shift and go to state 11
-    INT             shift and go to state 12
-    STRING          shift and go to state 13
-    $               shift and go to state 14
+    GET_VARIABLE    shift and go to state 11
+    FLOAT           shift and go to state 12
+    INT             shift and go to state 13
+    STRING          shift and go to state 14
+    $               shift and go to state 15
 
-    expression                     shift and go to state 28
+    expression                     shift and go to state 31
 
-state 22
+state 24
 
     (10) expression -> $ ( . ( expression ADD_OP expression ) )
     (11) expression -> $ ( . ( expression MUL_OP expression ) )
 
-    (               shift and go to state 29
+    (               shift and go to state 32
 
 
-state 23
+state 25
 
     (17) statement -> IF [ expression . ] newline THEN newline block FI
     (18) statement -> IF [ expression . ] newline THEN newline block ELSE newline block FI
@@ -403,26 +437,39 @@ state 23
     (13) expression -> expression . NE_CMP expression
     (14) expression -> expression . LT_CMP expression
 
-    ]               shift and go to state 30
-    EQ_CMP          shift and go to state 19
-    NE_CMP          shift and go to state 20
-    LT_CMP          shift and go to state 21
+    ]               shift and go to state 33
+    EQ_CMP          shift and go to state 21
+    NE_CMP          shift and go to state 22
+    LT_CMP          shift and go to state 23
 
 
-state 24
+state 26
 
     (19) statement -> WHILE [ expression . ] ; DO newline block DONE
     (12) expression -> expression . EQ_CMP expression
     (13) expression -> expression . NE_CMP expression
     (14) expression -> expression . LT_CMP expression
 
-    ]               shift and go to state 31
-    EQ_CMP          shift and go to state 19
-    NE_CMP          shift and go to state 20
-    LT_CMP          shift and go to state 21
+    ]               shift and go to state 34
+    EQ_CMP          shift and go to state 21
+    NE_CMP          shift and go to state 22
+    LT_CMP          shift and go to state 23
 
 
-state 25
+state 27
+
+    (20) statement -> UNTIL [ expression . ] ; DO newline block DONE
+    (12) expression -> expression . EQ_CMP expression
+    (13) expression -> expression . NE_CMP expression
+    (14) expression -> expression . LT_CMP expression
+
+    ]               shift and go to state 35
+    EQ_CMP          shift and go to state 21
+    NE_CMP          shift and go to state 22
+    LT_CMP          shift and go to state 23
+
+
+state 28
 
     (4) affectation -> SET_VARIABLE = expression .
     (12) expression -> expression . EQ_CMP expression
@@ -430,12 +477,12 @@ state 25
     (14) expression -> expression . LT_CMP expression
 
     newline         reduce using rule 4 (affectation -> SET_VARIABLE = expression .)
-    EQ_CMP          shift and go to state 19
-    NE_CMP          shift and go to state 20
-    LT_CMP          shift and go to state 21
+    EQ_CMP          shift and go to state 21
+    NE_CMP          shift and go to state 22
+    LT_CMP          shift and go to state 23
 
 
-state 26
+state 29
 
     (12) expression -> expression EQ_CMP expression .
     (12) expression -> expression . EQ_CMP expression
@@ -450,16 +497,16 @@ state 26
     ADD_OP          reduce using rule 12 (expression -> expression EQ_CMP expression .)
     MUL_OP          reduce using rule 12 (expression -> expression EQ_CMP expression .)
     )               reduce using rule 12 (expression -> expression EQ_CMP expression .)
-    EQ_CMP          shift and go to state 19
-    NE_CMP          shift and go to state 20
-    LT_CMP          shift and go to state 21
+    EQ_CMP          shift and go to state 21
+    NE_CMP          shift and go to state 22
+    LT_CMP          shift and go to state 23
 
   ! EQ_CMP          [ reduce using rule 12 (expression -> expression EQ_CMP expression .) ]
   ! NE_CMP          [ reduce using rule 12 (expression -> expression EQ_CMP expression .) ]
   ! LT_CMP          [ reduce using rule 12 (expression -> expression EQ_CMP expression .) ]
 
 
-state 27
+state 30
 
     (13) expression -> expression NE_CMP expression .
     (12) expression -> expression . EQ_CMP expression
@@ -474,16 +521,16 @@ state 27
     ADD_OP          reduce using rule 13 (expression -> expression NE_CMP expression .)
     MUL_OP          reduce using rule 13 (expression -> expression NE_CMP expression .)
     )               reduce using rule 13 (expression -> expression NE_CMP expression .)
-    EQ_CMP          shift and go to state 19
-    NE_CMP          shift and go to state 20
-    LT_CMP          shift and go to state 21
+    EQ_CMP          shift and go to state 21
+    NE_CMP          shift and go to state 22
+    LT_CMP          shift and go to state 23
 
   ! EQ_CMP          [ reduce using rule 13 (expression -> expression NE_CMP expression .) ]
   ! NE_CMP          [ reduce using rule 13 (expression -> expression NE_CMP expression .) ]
   ! LT_CMP          [ reduce using rule 13 (expression -> expression NE_CMP expression .) ]
 
 
-state 28
+state 31
 
     (14) expression -> expression LT_CMP expression .
     (12) expression -> expression . EQ_CMP expression
@@ -498,16 +545,16 @@ state 28
     ADD_OP          reduce using rule 14 (expression -> expression LT_CMP expression .)
     MUL_OP          reduce using rule 14 (expression -> expression LT_CMP expression .)
     )               reduce using rule 14 (expression -> expression LT_CMP expression .)
-    EQ_CMP          shift and go to state 19
-    NE_CMP          shift and go to state 20
-    LT_CMP          shift and go to state 21
+    EQ_CMP          shift and go to state 21
+    NE_CMP          shift and go to state 22
+    LT_CMP          shift and go to state 23
 
   ! EQ_CMP          [ reduce using rule 14 (expression -> expression LT_CMP expression .) ]
   ! NE_CMP          [ reduce using rule 14 (expression -> expression LT_CMP expression .) ]
   ! LT_CMP          [ reduce using rule 14 (expression -> expression LT_CMP expression .) ]
 
 
-state 29
+state 32
 
     (10) expression -> $ ( ( . expression ADD_OP expression ) )
     (11) expression -> $ ( ( . expression MUL_OP expression ) )
@@ -521,30 +568,37 @@ state 29
     (13) expression -> . expression NE_CMP expression
     (14) expression -> . expression LT_CMP expression
 
-    GET_VARIABLE    shift and go to state 10
-    FLOAT           shift and go to state 11
-    INT             shift and go to state 12
-    STRING          shift and go to state 13
-    $               shift and go to state 14
+    GET_VARIABLE    shift and go to state 11
+    FLOAT           shift and go to state 12
+    INT             shift and go to state 13
+    STRING          shift and go to state 14
+    $               shift and go to state 15
 
-    expression                     shift and go to state 32
+    expression                     shift and go to state 36
 
-state 30
+state 33
 
     (17) statement -> IF [ expression ] . newline THEN newline block FI
     (18) statement -> IF [ expression ] . newline THEN newline block ELSE newline block FI
 
-    newline         shift and go to state 33
+    newline         shift and go to state 37
 
 
-state 31
+state 34
 
     (19) statement -> WHILE [ expression ] . ; DO newline block DONE
 
-    ;               shift and go to state 34
+    ;               shift and go to state 38
 
 
-state 32
+state 35
+
+    (20) statement -> UNTIL [ expression ] . ; DO newline block DONE
+
+    ;               shift and go to state 39
+
+
+state 36
 
     (10) expression -> $ ( ( expression . ADD_OP expression ) )
     (11) expression -> $ ( ( expression . MUL_OP expression ) )
@@ -552,29 +606,36 @@ state 32
     (13) expression -> expression . NE_CMP expression
     (14) expression -> expression . LT_CMP expression
 
-    ADD_OP          shift and go to state 35
-    MUL_OP          shift and go to state 36
-    EQ_CMP          shift and go to state 19
-    NE_CMP          shift and go to state 20
-    LT_CMP          shift and go to state 21
+    ADD_OP          shift and go to state 40
+    MUL_OP          shift and go to state 41
+    EQ_CMP          shift and go to state 21
+    NE_CMP          shift and go to state 22
+    LT_CMP          shift and go to state 23
 
 
-state 33
+state 37
 
     (17) statement -> IF [ expression ] newline . THEN newline block FI
     (18) statement -> IF [ expression ] newline . THEN newline block ELSE newline block FI
 
-    THEN            shift and go to state 37
+    THEN            shift and go to state 42
 
 
-state 34
+state 38
 
     (19) statement -> WHILE [ expression ] ; . DO newline block DONE
 
-    DO              shift and go to state 38
+    DO              shift and go to state 43
 
 
-state 35
+state 39
+
+    (20) statement -> UNTIL [ expression ] ; . DO newline block DONE
+
+    DO              shift and go to state 44
+
+
+state 40
 
     (10) expression -> $ ( ( expression ADD_OP . expression ) )
     (6) expression -> . GET_VARIABLE
@@ -587,15 +648,15 @@ state 35
     (13) expression -> . expression NE_CMP expression
     (14) expression -> . expression LT_CMP expression
 
-    GET_VARIABLE    shift and go to state 10
-    FLOAT           shift and go to state 11
-    INT             shift and go to state 12
-    STRING          shift and go to state 13
-    $               shift and go to state 14
+    GET_VARIABLE    shift and go to state 11
+    FLOAT           shift and go to state 12
+    INT             shift and go to state 13
+    STRING          shift and go to state 14
+    $               shift and go to state 15
 
-    expression                     shift and go to state 39
+    expression                     shift and go to state 45
 
-state 36
+state 41
 
     (11) expression -> $ ( ( expression MUL_OP . expression ) )
     (6) expression -> . GET_VARIABLE
@@ -608,56 +669,63 @@ state 36
     (13) expression -> . expression NE_CMP expression
     (14) expression -> . expression LT_CMP expression
 
-    GET_VARIABLE    shift and go to state 10
-    FLOAT           shift and go to state 11
-    INT             shift and go to state 12
-    STRING          shift and go to state 13
-    $               shift and go to state 14
+    GET_VARIABLE    shift and go to state 11
+    FLOAT           shift and go to state 12
+    INT             shift and go to state 13
+    STRING          shift and go to state 14
+    $               shift and go to state 15
 
-    expression                     shift and go to state 40
+    expression                     shift and go to state 46
 
-state 37
+state 42
 
     (17) statement -> IF [ expression ] newline THEN . newline block FI
     (18) statement -> IF [ expression ] newline THEN . newline block ELSE newline block FI
 
-    newline         shift and go to state 41
+    newline         shift and go to state 47
 
 
-state 38
+state 43
 
     (19) statement -> WHILE [ expression ] ; DO . newline block DONE
 
-    newline         shift and go to state 42
+    newline         shift and go to state 48
 
 
-state 39
+state 44
+
+    (20) statement -> UNTIL [ expression ] ; DO . newline block DONE
+
+    newline         shift and go to state 49
+
+
+state 45
 
     (10) expression -> $ ( ( expression ADD_OP expression . ) )
     (12) expression -> expression . EQ_CMP expression
     (13) expression -> expression . NE_CMP expression
     (14) expression -> expression . LT_CMP expression
 
-    )               shift and go to state 43
-    EQ_CMP          shift and go to state 19
-    NE_CMP          shift and go to state 20
-    LT_CMP          shift and go to state 21
+    )               shift and go to state 50
+    EQ_CMP          shift and go to state 21
+    NE_CMP          shift and go to state 22
+    LT_CMP          shift and go to state 23
 
 
-state 40
+state 46
 
     (11) expression -> $ ( ( expression MUL_OP expression . ) )
     (12) expression -> expression . EQ_CMP expression
     (13) expression -> expression . NE_CMP expression
     (14) expression -> expression . LT_CMP expression
 
-    )               shift and go to state 44
-    EQ_CMP          shift and go to state 19
-    NE_CMP          shift and go to state 20
-    LT_CMP          shift and go to state 21
+    )               shift and go to state 51
+    EQ_CMP          shift and go to state 21
+    NE_CMP          shift and go to state 22
+    LT_CMP          shift and go to state 23
 
 
-state 41
+state 47
 
     (17) statement -> IF [ expression ] newline THEN newline . block FI
     (18) statement -> IF [ expression ] newline THEN newline . block ELSE newline block FI
@@ -668,18 +736,20 @@ state 41
     (17) statement -> . IF [ expression ] newline THEN newline block FI
     (18) statement -> . IF [ expression ] newline THEN newline block ELSE newline block FI
     (19) statement -> . WHILE [ expression ] ; DO newline block DONE
+    (20) statement -> . UNTIL [ expression ] ; DO newline block DONE
     (4) affectation -> . SET_VARIABLE = expression
 
     ECHO            shift and go to state 4
     IF              shift and go to state 5
     WHILE           shift and go to state 6
-    SET_VARIABLE    shift and go to state 7
+    UNTIL           shift and go to state 7
+    SET_VARIABLE    shift and go to state 8
 
-    block                          shift and go to state 45
-    statement                      shift and go to state 46
+    block                          shift and go to state 52
+    statement                      shift and go to state 53
     affectation                    shift and go to state 3
 
-state 42
+state 48
 
     (19) statement -> WHILE [ expression ] ; DO newline . block DONE
     (15) block -> . statement newline
@@ -689,56 +759,88 @@ state 42
     (17) statement -> . IF [ expression ] newline THEN newline block FI
     (18) statement -> . IF [ expression ] newline THEN newline block ELSE newline block FI
     (19) statement -> . WHILE [ expression ] ; DO newline block DONE
+    (20) statement -> . UNTIL [ expression ] ; DO newline block DONE
     (4) affectation -> . SET_VARIABLE = expression
 
     ECHO            shift and go to state 4
     IF              shift and go to state 5
     WHILE           shift and go to state 6
-    SET_VARIABLE    shift and go to state 7
+    UNTIL           shift and go to state 7
+    SET_VARIABLE    shift and go to state 8
 
-    block                          shift and go to state 47
-    statement                      shift and go to state 46
+    block                          shift and go to state 54
+    statement                      shift and go to state 53
     affectation                    shift and go to state 3
 
-state 43
+state 49
+
+    (20) statement -> UNTIL [ expression ] ; DO newline . block DONE
+    (15) block -> . statement newline
+    (16) block -> . statement newline block
+    (3) statement -> . affectation
+    (5) statement -> . ECHO expression
+    (17) statement -> . IF [ expression ] newline THEN newline block FI
+    (18) statement -> . IF [ expression ] newline THEN newline block ELSE newline block FI
+    (19) statement -> . WHILE [ expression ] ; DO newline block DONE
+    (20) statement -> . UNTIL [ expression ] ; DO newline block DONE
+    (4) affectation -> . SET_VARIABLE = expression
+
+    ECHO            shift and go to state 4
+    IF              shift and go to state 5
+    WHILE           shift and go to state 6
+    UNTIL           shift and go to state 7
+    SET_VARIABLE    shift and go to state 8
+
+    block                          shift and go to state 55
+    statement                      shift and go to state 53
+    affectation                    shift and go to state 3
+
+state 50
 
     (10) expression -> $ ( ( expression ADD_OP expression ) . )
 
-    )               shift and go to state 48
+    )               shift and go to state 56
 
 
-state 44
+state 51
 
     (11) expression -> $ ( ( expression MUL_OP expression ) . )
 
-    )               shift and go to state 49
+    )               shift and go to state 57
 
 
-state 45
+state 52
 
     (17) statement -> IF [ expression ] newline THEN newline block . FI
     (18) statement -> IF [ expression ] newline THEN newline block . ELSE newline block FI
 
-    FI              shift and go to state 50
-    ELSE            shift and go to state 51
+    FI              shift and go to state 58
+    ELSE            shift and go to state 59
 
 
-state 46
+state 53
 
     (15) block -> statement . newline
     (16) block -> statement . newline block
 
-    newline         shift and go to state 52
+    newline         shift and go to state 60
 
 
-state 47
+state 54
 
     (19) statement -> WHILE [ expression ] ; DO newline block . DONE
 
-    DONE            shift and go to state 53
+    DONE            shift and go to state 61
 
 
-state 48
+state 55
+
+    (20) statement -> UNTIL [ expression ] ; DO newline block . DONE
+
+    DONE            shift and go to state 62
+
+
+state 56
 
     (10) expression -> $ ( ( expression ADD_OP expression ) ) .
 
@@ -752,7 +854,7 @@ state 48
     )               reduce using rule 10 (expression -> $ ( ( expression ADD_OP expression ) ) .)
 
 
-state 49
+state 57
 
     (11) expression -> $ ( ( expression MUL_OP expression ) ) .
 
@@ -766,21 +868,21 @@ state 49
     )               reduce using rule 11 (expression -> $ ( ( expression MUL_OP expression ) ) .)
 
 
-state 50
+state 58
 
     (17) statement -> IF [ expression ] newline THEN newline block FI .
 
     newline         reduce using rule 17 (statement -> IF [ expression ] newline THEN newline block FI .)
 
 
-state 51
+state 59
 
     (18) statement -> IF [ expression ] newline THEN newline block ELSE . newline block FI
 
-    newline         shift and go to state 54
+    newline         shift and go to state 63
 
 
-state 52
+state 60
 
     (15) block -> statement newline .
     (16) block -> statement newline . block
@@ -791,6 +893,7 @@ state 52
     (17) statement -> . IF [ expression ] newline THEN newline block FI
     (18) statement -> . IF [ expression ] newline THEN newline block ELSE newline block FI
     (19) statement -> . WHILE [ expression ] ; DO newline block DONE
+    (20) statement -> . UNTIL [ expression ] ; DO newline block DONE
     (4) affectation -> . SET_VARIABLE = expression
 
     FI              reduce using rule 15 (block -> statement newline .)
@@ -799,20 +902,28 @@ state 52
     ECHO            shift and go to state 4
     IF              shift and go to state 5
     WHILE           shift and go to state 6
-    SET_VARIABLE    shift and go to state 7
+    UNTIL           shift and go to state 7
+    SET_VARIABLE    shift and go to state 8
 
-    statement                      shift and go to state 46
-    block                          shift and go to state 55
+    statement                      shift and go to state 53
+    block                          shift and go to state 64
     affectation                    shift and go to state 3
 
-state 53
+state 61
 
     (19) statement -> WHILE [ expression ] ; DO newline block DONE .
 
     newline         reduce using rule 19 (statement -> WHILE [ expression ] ; DO newline block DONE .)
 
 
-state 54
+state 62
+
+    (20) statement -> UNTIL [ expression ] ; DO newline block DONE .
+
+    newline         reduce using rule 20 (statement -> UNTIL [ expression ] ; DO newline block DONE .)
+
+
+state 63
 
     (18) statement -> IF [ expression ] newline THEN newline block ELSE newline . block FI
     (15) block -> . statement newline
@@ -822,18 +933,20 @@ state 54
     (17) statement -> . IF [ expression ] newline THEN newline block FI
     (18) statement -> . IF [ expression ] newline THEN newline block ELSE newline block FI
     (19) statement -> . WHILE [ expression ] ; DO newline block DONE
+    (20) statement -> . UNTIL [ expression ] ; DO newline block DONE
     (4) affectation -> . SET_VARIABLE = expression
 
     ECHO            shift and go to state 4
     IF              shift and go to state 5
     WHILE           shift and go to state 6
-    SET_VARIABLE    shift and go to state 7
+    UNTIL           shift and go to state 7
+    SET_VARIABLE    shift and go to state 8
 
-    block                          shift and go to state 56
-    statement                      shift and go to state 46
+    block                          shift and go to state 65
+    statement                      shift and go to state 53
     affectation                    shift and go to state 3
 
-state 55
+state 64
 
     (16) block -> statement newline block .
 
@@ -842,14 +955,14 @@ state 55
     DONE            reduce using rule 16 (block -> statement newline block .)
 
 
-state 56
+state 65
 
     (18) statement -> IF [ expression ] newline THEN newline block ELSE newline block . FI
 
-    FI              shift and go to state 57
+    FI              shift and go to state 66
 
 
-state 57
+state 66
 
     (18) statement -> IF [ expression ] newline THEN newline block ELSE newline block FI .
 
@@ -858,12 +971,12 @@ state 57
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for EQ_CMP in state 26 resolved as shift
-WARNING: shift/reduce conflict for NE_CMP in state 26 resolved as shift
-WARNING: shift/reduce conflict for LT_CMP in state 26 resolved as shift
-WARNING: shift/reduce conflict for EQ_CMP in state 27 resolved as shift
-WARNING: shift/reduce conflict for NE_CMP in state 27 resolved as shift
-WARNING: shift/reduce conflict for LT_CMP in state 27 resolved as shift
-WARNING: shift/reduce conflict for EQ_CMP in state 28 resolved as shift
-WARNING: shift/reduce conflict for NE_CMP in state 28 resolved as shift
-WARNING: shift/reduce conflict for LT_CMP in state 28 resolved as shift
+WARNING: shift/reduce conflict for EQ_CMP in state 29 resolved as shift
+WARNING: shift/reduce conflict for NE_CMP in state 29 resolved as shift
+WARNING: shift/reduce conflict for LT_CMP in state 29 resolved as shift
+WARNING: shift/reduce conflict for EQ_CMP in state 30 resolved as shift
+WARNING: shift/reduce conflict for NE_CMP in state 30 resolved as shift
+WARNING: shift/reduce conflict for LT_CMP in state 30 resolved as shift
+WARNING: shift/reduce conflict for EQ_CMP in state 31 resolved as shift
+WARNING: shift/reduce conflict for NE_CMP in state 31 resolved as shift
+WARNING: shift/reduce conflict for LT_CMP in state 31 resolved as shift

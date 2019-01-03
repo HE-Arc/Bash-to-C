@@ -171,6 +171,9 @@ class EchoNode(Node):
 class WhileNode(Node):
     type = 'while'
 
+class UntilNode(Node):
+    type = 'until'
+
 class CondNode(Node):
     type = 'if'
 

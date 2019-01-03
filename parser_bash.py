@@ -88,6 +88,10 @@ def p_while(p):
     ''' statement : WHILE '[' expression ']' ';' DO newline block DONE '''
     p[0] = AST.WhileNode([p[3], p[8]])
 
+def p_until(p):
+    ''' statement : UNTIL '[' expression ']' ';' DO newline block DONE '''
+    p[0] = AST.UntilNode([p[3], p[8]])
+
 def p_error(p):
     if p:
         print('Syntax error in line %d' % p.lineno)

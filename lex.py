@@ -26,8 +26,9 @@ reserved_words = (
 	'then',
 	'else',
 	'fi',
-	# while
+	# boucles
 	'while',
+	'until',
 	'do',
 	'done',
 )
