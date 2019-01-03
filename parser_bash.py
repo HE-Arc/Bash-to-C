@@ -61,7 +61,8 @@ def p_expression_op(p):
 
 def p_expression_cmp(p):
     ''' expression : expression EQ_CMP expression
-                    |  expression NE_CMP expression '''
+                    | expression NE_CMP expression
+                    | expression LT_CMP expression '''
     p[0] = AST.CmpNode(p[2], [p[1], p[3]])
 
 
@@ -83,6 +84,9 @@ def p_condition_if_else(p):
     ''' statement : IF '[' expression ']' newline THEN newline block ELSE newline block FI '''
     p[0] = AST.CondNode([p[3], p[8], p[11]])
 
+def p_while(p):
+    ''' statement : WHILE '[' expression ']' ';' DO newline block DONE '''
+    p[0] = AST.WhileNode([p[3], p[8]])
 
 def p_error(p):
     if p:

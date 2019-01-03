@@ -15,6 +15,7 @@ vars = dict()
 comparators = {
 	'-eq' : '==',
 	'-ne' : '!=',
+	'-lt' : '<',
 }
 
 class VarType:

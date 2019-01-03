@@ -26,6 +26,10 @@ reserved_words = (
 	'then',
 	'else',
 	'fi',
+	# while
+	'while',
+	'do',
+	'done',
 )
 
 tokens = (
@@ -41,14 +45,16 @@ tokens = (
 	# Comparateurs
 	'EQ_CMP',		# equal
 	'NE_CMP',		# not equal
+	'LT_CMP',		# less than
 	# Opérateurs
 	'ADD_OP',
 	'MUL_OP',
 	'newline',
+
 ) + tuple(map(lambda s:s.upper(),reserved_words))
 
 
-literals = '$()=[]'
+literals = '$()=[];'
 
 
 def t_HEADER(t):
@@ -95,6 +101,10 @@ def t_EQ_CMP(t):
 
 def t_NE_CMP(t):
 	r'-ne'
+	return t
+
+def t_LT_CMP(t):
+	r'-lt'
 	return t
 
 
