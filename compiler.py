@@ -78,28 +78,28 @@ def compile(self):
 @addToClass(AST.AssignNode)
 def compile(self):
 	c_code = ""
-	var_name = self.children[0].tok;
+	var_name = self.children[0].tok
 	affectation_node = self.children[1]
-	affectation = affectation_node.compile();
+	affectation = affectation_node.compile()
 	if var_name not in vars:
 		if isinstance(affectation_node, AST.IntNode):
 			vars[var_name] = [VarType.INT, affectation]
-			c_code += f"int {var_name}";
+			c_code += f"int {var_name}"
 		elif isinstance(affectation_node, AST.FloatNode):
 			vars[var_name] = [VarType.FLOAT, affectation]
-			c_code += f"float {var_name}";
+			c_code += f"float {var_name}"
 		elif isinstance(affectation_node, AST.StringNode):
 			vars[var_name] = [VarType.STRING, affectation]
-			c_code += f"char {var_name}[]";
+			c_code += f"char {var_name}[]"
 		elif isinstance(affectation_node, AST.OpNode):
 			vars[var_name] = [VarType.FLOAT, affectation]
-			c_code += f"float {var_name}";
+			c_code += f"float {var_name}"
 		elif isinstance(affectation_node, AST.VariableNode):
 			vars[var_name] = [vars[affectation][0], affectation]
 			c_code += f"{vars[affectation][0]} "
 			if vars[affectation][0] == VarType.STRING:
 				c_code += "*"
-			c_code += f"{var_name}";
+			c_code += f"{var_name}"
 
 	# Ecrit le code correspondant à une assignation
 	c_code += f" = {affectation};\n"
