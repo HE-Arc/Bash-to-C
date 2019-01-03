@@ -178,8 +178,12 @@ def compile(self):
 	c_code += "\t}"
 	return c_code
 
-# noeud de boucle while
-# todo
+@addToClass(AST.WhileNode)
+def compile(self):
+	c_code = ""
+	c_code += f"while({self.children[0].compile()})"
+	c_code += f"{self.children[1].compile()}\n"
+	return c_code
 
 if __name__ == "__main__":
 	from parser_bash import parse
