@@ -12,6 +12,11 @@ Create the basic c structure
 # Dictionnaire comportant les variables du programme, sous cette forme: {NOM_VAR:[TYPE, VALEUR], ...}
 vars = dict()
 
+comparators = {
+	'-eq' : '==',
+	'-ne' : '!=',
+}
+
 class VarType:
 	INT = "int"
 	FLOAT = "float"
@@ -141,6 +146,36 @@ def convert_string_variables(str):
 		code_c += f",{vars[var_name][1]}"
 
 	return code_c
+
+
+@addToClass(AST.CmpNode)
+def compile(self):
+	c_code = ""
+	cmp = comparators[self.cmp]
+	c_code += f"{self.children[0].compile()} {cmp} {self.children[1].compile()}"
+	return c_code
+
+
+@addToClass(AST.CondNode)
+def compile(self):
+	c_code = ""
+	c_code += f"if ({self.children[0].compile()})\n"
+	c_code += f"{self.children[1].compile()}\n"
+	if len(self.children) > 2 :
+		c_code += "\telse\n"
+		c_code += f"{self.children[2].compile()}\n"
+	return c_code
+
+
+@addToClass(AST.BlockNode)
+def compile(self):
+	c_code = ""
+	c_code += "\t{\n"
+	for c in self.children:
+		c_code += "\t\t"
+		c_code += c.compile()
+	c_code += "\t}"
+	return c_code
 
 # noeud de boucle while
 # todo

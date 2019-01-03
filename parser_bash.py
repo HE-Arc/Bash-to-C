@@ -62,16 +62,25 @@ def p_expression_op(p):
 def p_expression_cmp(p):
     ''' expression : expression EQ_CMP expression
                     |  expression NE_CMP expression '''
-    p[0] = AST.OpNode(p[2], [p[1], p[3]])
+    p[0] = AST.CmpNode(p[2], [p[1], p[3]])
+
+
+def p_block(p):
+    ''' block : statement newline '''
+    p[0] = AST.BlockNode(p[1])
+
+def p_block_recurssive(p):
+    ''' block : statement newline block '''
+    p[0] = AST.BlockNode([p[1]]+p[3].children)
 
 
 def p_condition_if(p):
-    ''' statement : IF '[' expression ']' newline THEN newline programme FI '''
+    ''' statement : IF '[' expression ']' newline THEN newline block FI '''
     p[0] = AST.CondNode([p[3], p[8]])
 
 
 def p_condition_if_else(p):
-    ''' statement : IF '[' expression ']' newline THEN newline programme ELSE newline programme FI '''
+    ''' statement : IF '[' expression ']' newline THEN newline block ELSE newline block FI '''
     p[0] = AST.CondNode([p[3], p[8], p[11]])
 
 
