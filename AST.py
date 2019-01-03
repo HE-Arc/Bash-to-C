@@ -174,6 +174,21 @@ class WhileNode(Node):
 class CondNode(Node):
     type = 'if'
 
+class BlockNode(Node):
+    type = 'block'
+
+class CmpNode(Node):
+    def __init__(self, cmp, children):
+        Node.__init__(self,children)
+        self.cmp = cmp
+        try:
+            self.nbargs = len(children)
+        except AttributeError:
+            self.nbargs = 1
+
+    def __repr__(self):
+        return "%s (%s)" % (self.cmp, self.nbargs)
+
 class EntryNode(Node):
     type = 'ENTRY'
     def __init__(self):

@@ -20,8 +20,10 @@ Rule 10    expression -> $ ( ( expression ADD_OP expression ) )
 Rule 11    expression -> $ ( ( expression MUL_OP expression ) )
 Rule 12    expression -> expression EQ_CMP expression
 Rule 13    expression -> expression NE_CMP expression
-Rule 14    statement -> IF [ expression ] newline THEN newline programme FI
-Rule 15    statement -> IF [ expression ] newline THEN newline programme ELSE newline programme FI
+Rule 14    block -> statement newline
+Rule 15    block -> statement newline block
+Rule 16    statement -> IF [ expression ] newline THEN newline block FI
+Rule 17    statement -> IF [ expression ] newline THEN newline block ELSE newline block FI
 
 Terminals, with rules where they appear
 
@@ -31,30 +33,31 @@ $                    : 10 11
 =                    : 4
 ADD_OP               : 10
 ECHO                 : 5
-ELSE                 : 15
+ELSE                 : 17
 EQ_CMP               : 12
-FI                   : 14 15
+FI                   : 16 17
 FLOAT                : 7
 GET_VARIABLE         : 6
 HEADER               : 
-IF                   : 14 15
+IF                   : 16 17
 INT                  : 8
 MUL_OP               : 11
 NE_CMP               : 13
 SET_VARIABLE         : 4
 STRING               : 9
-THEN                 : 14 15
-[                    : 14 15
-]                    : 14 15
+THEN                 : 16 17
+[                    : 16 17
+]                    : 16 17
 error                : 
-newline              : 1 2 14 14 15 15 15
+newline              : 1 2 14 15 16 16 17 17 17
 
 Nonterminals, with rules where they appear
 
 affectation          : 3
-expression           : 4 5 10 10 11 11 12 12 13 13 14 15
-programme            : 2 14 15 15 0
-statement            : 1 2
+block                : 15 16 17 17
+expression           : 4 5 10 10 11 11 12 12 13 13 16 17
+programme            : 2 0
+statement            : 1 2 14 15
 
 Parsing method: LALR
 
@@ -65,8 +68,8 @@ state 0
     (2) programme -> . statement newline programme
     (3) statement -> . affectation
     (5) statement -> . ECHO expression
-    (14) statement -> . IF [ expression ] newline THEN newline programme FI
-    (15) statement -> . IF [ expression ] newline THEN newline programme ELSE newline programme FI
+    (16) statement -> . IF [ expression ] newline THEN newline block FI
+    (17) statement -> . IF [ expression ] newline THEN newline block ELSE newline block FI
     (4) affectation -> . SET_VARIABLE = expression
 
     ECHO            shift and go to state 4
@@ -120,8 +123,8 @@ state 4
 
 state 5
 
-    (14) statement -> IF . [ expression ] newline THEN newline programme FI
-    (15) statement -> IF . [ expression ] newline THEN newline programme ELSE newline programme FI
+    (16) statement -> IF . [ expression ] newline THEN newline block FI
+    (17) statement -> IF . [ expression ] newline THEN newline block ELSE newline block FI
 
     [               shift and go to state 14
 
@@ -141,13 +144,11 @@ state 7
     (2) programme -> . statement newline programme
     (3) statement -> . affectation
     (5) statement -> . ECHO expression
-    (14) statement -> . IF [ expression ] newline THEN newline programme FI
-    (15) statement -> . IF [ expression ] newline THEN newline programme ELSE newline programme FI
+    (16) statement -> . IF [ expression ] newline THEN newline block FI
+    (17) statement -> . IF [ expression ] newline THEN newline block ELSE newline block FI
     (4) affectation -> . SET_VARIABLE = expression
 
     $end            reduce using rule 1 (programme -> statement newline .)
-    FI              reduce using rule 1 (programme -> statement newline .)
-    ELSE            reduce using rule 1 (programme -> statement newline .)
     ECHO            shift and go to state 4
     IF              shift and go to state 5
     SET_VARIABLE    shift and go to state 6
@@ -229,8 +230,8 @@ state 13
 
 state 14
 
-    (14) statement -> IF [ . expression ] newline THEN newline programme FI
-    (15) statement -> IF [ . expression ] newline THEN newline programme ELSE newline programme FI
+    (16) statement -> IF [ . expression ] newline THEN newline block FI
+    (17) statement -> IF [ . expression ] newline THEN newline block ELSE newline block FI
     (6) expression -> . GET_VARIABLE
     (7) expression -> . FLOAT
     (8) expression -> . INT
@@ -273,8 +274,6 @@ state 16
     (2) programme -> statement newline programme .
 
     $end            reduce using rule 2 (programme -> statement newline programme .)
-    FI              reduce using rule 2 (programme -> statement newline programme .)
-    ELSE            reduce using rule 2 (programme -> statement newline programme .)
 
 
 state 17
@@ -327,8 +326,8 @@ state 19
 
 state 20
 
-    (14) statement -> IF [ expression . ] newline THEN newline programme FI
-    (15) statement -> IF [ expression . ] newline THEN newline programme ELSE newline programme FI
+    (16) statement -> IF [ expression . ] newline THEN newline block FI
+    (17) statement -> IF [ expression . ] newline THEN newline block ELSE newline block FI
     (12) expression -> expression . EQ_CMP expression
     (13) expression -> expression . NE_CMP expression
 
@@ -411,8 +410,8 @@ state 24
 
 state 25
 
-    (14) statement -> IF [ expression ] . newline THEN newline programme FI
-    (15) statement -> IF [ expression ] . newline THEN newline programme ELSE newline programme FI
+    (16) statement -> IF [ expression ] . newline THEN newline block FI
+    (17) statement -> IF [ expression ] . newline THEN newline block ELSE newline block FI
 
     newline         shift and go to state 27
 
@@ -432,8 +431,8 @@ state 26
 
 state 27
 
-    (14) statement -> IF [ expression ] newline . THEN newline programme FI
-    (15) statement -> IF [ expression ] newline . THEN newline programme ELSE newline programme FI
+    (16) statement -> IF [ expression ] newline . THEN newline block FI
+    (17) statement -> IF [ expression ] newline . THEN newline block ELSE newline block FI
 
     THEN            shift and go to state 30
 
@@ -480,8 +479,8 @@ state 29
 
 state 30
 
-    (14) statement -> IF [ expression ] newline THEN . newline programme FI
-    (15) statement -> IF [ expression ] newline THEN . newline programme ELSE newline programme FI
+    (16) statement -> IF [ expression ] newline THEN . newline block FI
+    (17) statement -> IF [ expression ] newline THEN . newline block ELSE newline block FI
 
     newline         shift and go to state 33
 
@@ -510,48 +509,56 @@ state 32
 
 state 33
 
-    (14) statement -> IF [ expression ] newline THEN newline . programme FI
-    (15) statement -> IF [ expression ] newline THEN newline . programme ELSE newline programme FI
-    (1) programme -> . statement newline
-    (2) programme -> . statement newline programme
+    (16) statement -> IF [ expression ] newline THEN newline . block FI
+    (17) statement -> IF [ expression ] newline THEN newline . block ELSE newline block FI
+    (14) block -> . statement newline
+    (15) block -> . statement newline block
     (3) statement -> . affectation
     (5) statement -> . ECHO expression
-    (14) statement -> . IF [ expression ] newline THEN newline programme FI
-    (15) statement -> . IF [ expression ] newline THEN newline programme ELSE newline programme FI
+    (16) statement -> . IF [ expression ] newline THEN newline block FI
+    (17) statement -> . IF [ expression ] newline THEN newline block ELSE newline block FI
     (4) affectation -> . SET_VARIABLE = expression
 
     ECHO            shift and go to state 4
     IF              shift and go to state 5
     SET_VARIABLE    shift and go to state 6
 
-    programme                      shift and go to state 36
-    statement                      shift and go to state 2
+    block                          shift and go to state 36
+    statement                      shift and go to state 37
     affectation                    shift and go to state 3
 
 state 34
 
     (10) expression -> $ ( ( expression ADD_OP expression ) . )
 
-    )               shift and go to state 37
+    )               shift and go to state 38
 
 
 state 35
 
     (11) expression -> $ ( ( expression MUL_OP expression ) . )
 
-    )               shift and go to state 38
+    )               shift and go to state 39
 
 
 state 36
 
-    (14) statement -> IF [ expression ] newline THEN newline programme . FI
-    (15) statement -> IF [ expression ] newline THEN newline programme . ELSE newline programme FI
+    (16) statement -> IF [ expression ] newline THEN newline block . FI
+    (17) statement -> IF [ expression ] newline THEN newline block . ELSE newline block FI
 
-    FI              shift and go to state 39
-    ELSE            shift and go to state 40
+    FI              shift and go to state 40
+    ELSE            shift and go to state 41
 
 
 state 37
+
+    (14) block -> statement . newline
+    (15) block -> statement . newline block
+
+    newline         shift and go to state 42
+
+
+state 38
 
     (10) expression -> $ ( ( expression ADD_OP expression ) ) .
 
@@ -564,7 +571,7 @@ state 37
     )               reduce using rule 10 (expression -> $ ( ( expression ADD_OP expression ) ) .)
 
 
-state 38
+state 39
 
     (11) expression -> $ ( ( expression MUL_OP expression ) ) .
 
@@ -577,51 +584,81 @@ state 38
     )               reduce using rule 11 (expression -> $ ( ( expression MUL_OP expression ) ) .)
 
 
-state 39
-
-    (14) statement -> IF [ expression ] newline THEN newline programme FI .
-
-    newline         reduce using rule 14 (statement -> IF [ expression ] newline THEN newline programme FI .)
-
-
 state 40
 
-    (15) statement -> IF [ expression ] newline THEN newline programme ELSE . newline programme FI
+    (16) statement -> IF [ expression ] newline THEN newline block FI .
 
-    newline         shift and go to state 41
+    newline         reduce using rule 16 (statement -> IF [ expression ] newline THEN newline block FI .)
 
 
 state 41
 
-    (15) statement -> IF [ expression ] newline THEN newline programme ELSE newline . programme FI
-    (1) programme -> . statement newline
-    (2) programme -> . statement newline programme
+    (17) statement -> IF [ expression ] newline THEN newline block ELSE . newline block FI
+
+    newline         shift and go to state 43
+
+
+state 42
+
+    (14) block -> statement newline .
+    (15) block -> statement newline . block
+    (14) block -> . statement newline
+    (15) block -> . statement newline block
     (3) statement -> . affectation
     (5) statement -> . ECHO expression
-    (14) statement -> . IF [ expression ] newline THEN newline programme FI
-    (15) statement -> . IF [ expression ] newline THEN newline programme ELSE newline programme FI
+    (16) statement -> . IF [ expression ] newline THEN newline block FI
+    (17) statement -> . IF [ expression ] newline THEN newline block ELSE newline block FI
+    (4) affectation -> . SET_VARIABLE = expression
+
+    FI              reduce using rule 14 (block -> statement newline .)
+    ELSE            reduce using rule 14 (block -> statement newline .)
+    ECHO            shift and go to state 4
+    IF              shift and go to state 5
+    SET_VARIABLE    shift and go to state 6
+
+    statement                      shift and go to state 37
+    block                          shift and go to state 44
+    affectation                    shift and go to state 3
+
+state 43
+
+    (17) statement -> IF [ expression ] newline THEN newline block ELSE newline . block FI
+    (14) block -> . statement newline
+    (15) block -> . statement newline block
+    (3) statement -> . affectation
+    (5) statement -> . ECHO expression
+    (16) statement -> . IF [ expression ] newline THEN newline block FI
+    (17) statement -> . IF [ expression ] newline THEN newline block ELSE newline block FI
     (4) affectation -> . SET_VARIABLE = expression
 
     ECHO            shift and go to state 4
     IF              shift and go to state 5
     SET_VARIABLE    shift and go to state 6
 
-    programme                      shift and go to state 42
-    statement                      shift and go to state 2
+    block                          shift and go to state 45
+    statement                      shift and go to state 37
     affectation                    shift and go to state 3
 
-state 42
+state 44
 
-    (15) statement -> IF [ expression ] newline THEN newline programme ELSE newline programme . FI
+    (15) block -> statement newline block .
 
-    FI              shift and go to state 43
+    FI              reduce using rule 15 (block -> statement newline block .)
+    ELSE            reduce using rule 15 (block -> statement newline block .)
 
 
-state 43
+state 45
 
-    (15) statement -> IF [ expression ] newline THEN newline programme ELSE newline programme FI .
+    (17) statement -> IF [ expression ] newline THEN newline block ELSE newline block . FI
 
-    newline         reduce using rule 15 (statement -> IF [ expression ] newline THEN newline programme ELSE newline programme FI .)
+    FI              shift and go to state 46
+
+
+state 46
+
+    (17) statement -> IF [ expression ] newline THEN newline block ELSE newline block FI .
+
+    newline         reduce using rule 17 (statement -> IF [ expression ] newline THEN newline block ELSE newline block FI .)
 
 WARNING: 
 WARNING: Conflicts:
