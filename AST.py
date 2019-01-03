@@ -1,10 +1,10 @@
 #!/usr/bin/python
 # -*- coding: latin-1 -*-
 
-''' Petit module utilitaire pour la construction, la manipulation et la 
+''' Petit module utilitaire pour la construction, la manipulation et la
 repr�sentation d'arbres syntaxiques abstraits.
 
-S�rement plein de bugs et autres surprises. � prendre comme un 
+S�rement plein de bugs et autres surprises. � prendre comme un
 "work in progress"...
 Notamment, l'utilisation de pydot pour repr�senter un arbre syntaxique cousu
 est une utilisation un peu "limite" de graphviz. �a marche, mais le layout n'est
@@ -105,12 +105,21 @@ class TokenNode(Node):
     def __repr__(self):
         return repr(self.tok)
 
-class IntNode(Node):
-    type = 'INT'
+class VariableNode(Node):
+    type = 'variable'
     def __init__(self, tok):
         Node.__init__(self)
         self.tok = tok
-        
+
+    def __repr__(self):
+        return repr(self.tok)
+
+class IntNode(Node):
+    type = 'int'
+    def __init__(self, tok):
+        Node.__init__(self)
+        self.tok = tok
+
     def __repr__(self):
         return repr(self.tok)
 
@@ -119,7 +128,7 @@ class FloatNode(Node):
     def __init__(self, tok):
         Node.__init__(self)
         self.tok = tok
-        
+
     def __repr__(self):
         return repr(self.tok)
 
@@ -128,10 +137,10 @@ class StringNode(Node):
     def __init__(self, tok):
         Node.__init__(self)
         self.tok = tok
-        
+
     def __repr__(self):
         return repr(self.tok)
-    
+
 class OpNode(Node):
     def __init__(self, op, children):
         Node.__init__(self,children)
@@ -170,11 +179,11 @@ class EntryNode(Node):
 def addToClass(cls):
     ''' D�corateur permettant d'ajouter la fonction d�cor�e en tant que m�thode
     � une classe.
-    
+
     Permet d'impl�menter une forme �l�mentaire de programmation orient�e
     aspects en regroupant les m�thodes de diff�rentes classes impl�mentant
     une m�me fonctionnalit� en un seul endroit.
-    
+
     Attention, apr�s utilisation de ce d�corateur, la fonction d�cor�e reste dans
     le namespace courant. Si cela d�range, on peut utiliser del pour la d�truire.
     Je ne sais pas s'il existe un moyen d'�viter ce ph�nom�ne.
