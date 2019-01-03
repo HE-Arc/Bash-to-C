@@ -171,6 +171,9 @@ class EchoNode(Node):
 class WhileNode(Node):
     type = 'while'
 
+class CondNode(Node):
+    type = 'if'
+
 class EntryNode(Node):
     type = 'ENTRY'
     def __init__(self):

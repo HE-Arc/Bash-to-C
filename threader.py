@@ -8,6 +8,22 @@ def thread(self, lastNode):
     lastNode.addNext(self)
     return self
 
+
+@addToClass(AST.CondNode)
+def thread(self, lastNode):
+    exitIfNode = self.children[0].thread(lastNode)
+    exitIfNode.addNext(self)
+    exitBodyIfNode = self.children[1].thread(self)
+    # Check for ELSE
+    try:
+        exitBodyElseNode = self.children[2].thread(self)
+        exitBodyElseNode.addNext(self)
+    except:
+        None
+    exitBodyIfNode.addNext(self)
+    return self
+
+
 @addToClass(AST.WhileNode)
 def thread(self, lastNode):
     beforeCond = lastNode
@@ -17,16 +33,19 @@ def thread(self, lastNode):
     exitBody.addNext(beforeCond.next[-1])
     return self
 
+
 def thread(tree):
     entry = AST.EntryNode()
     tree.thread(entry)
     return entry
+
 
 if __name__ == "__main__":
     from parser_bash import parse
     import sys, os
     prog = open(sys.argv[1]).read()
     ast = parse(prog)
+    print(ast)
     entry = thread(ast)
 
     graph = ast.makegraphicaltree()
