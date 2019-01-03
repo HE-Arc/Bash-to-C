@@ -84,7 +84,7 @@ def t_SET_VARIABLE(t):
 	#print(f"----- t: {t} ----")
 	if t.value in reserved_words:
 		t.type = t.value.upper()
-	if t.value in reserved_words_c:
+	elif t.value in reserved_words_c:
 		t.value = 'var_' + t.value
 	return t
 
