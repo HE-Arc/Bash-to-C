@@ -4,7 +4,7 @@ int main()
 {
 	int x = 5;
 	int y = 10;
-	char z[] = x;
+	int z = x;
 	float add = x + y;
 	printf("$x + $y = $add");
 	float sub = y - x;

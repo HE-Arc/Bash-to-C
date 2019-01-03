@@ -93,16 +93,18 @@ yacc.yacc(outputdir='generated')
 
 if __name__ == '__main__':
     import sys
+    try:
+        prog = open(sys.argv[1]).read()
+        result = yacc.parse(prog, debug=True)
+        if result:
+            print(result)
 
-    prog = open(sys.argv[1]).read()
-    result = yacc.parse(prog, debug=True)
-    if result:
-        print(result)
-
-        import os
-        graph = result.makegraphicaltree()
-        name = os.path.splitext(sys.argv[1])[0] + '-ast.pdf'
-        graph.write_pdf(name)
-        print('wrote ast to', name)
-    else:
-        print('Parsing returned no result!')
+            import os
+            graph = result.makegraphicaltree()
+            name = os.path.splitext(sys.argv[1])[0] + '-ast.pdf'
+            graph.write_pdf(name)
+            print('wrote ast to', name)
+        else:
+            print('Parsing returned no result!')
+    except IndexError:
+        print("An error as occured: No file to analyse")

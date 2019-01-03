@@ -120,12 +120,15 @@ def compile(self):
 if __name__ == "__main__":
 	from parser_bash import parse
 	import sys, os
-	prog = open(sys.argv[1]).read()
-	ast = parse(prog)
+	try:
+		prog = open(sys.argv[1]).read()
+		ast = parse(prog)
 
-	compiled = ast.compile()
-	name = os.path.splitext(sys.argv[1])[0]+'.c'
-	outfile = open(name, 'w')
-	outfile.write(compiled)
-	outfile.close()
-	print ("Wrote output to", name)
+		compiled = ast.compile()
+		name = os.path.splitext(sys.argv[1])[0]+'.c'
+		outfile = open(name, 'w')
+		outfile.write(compiled)
+		outfile.close()
+		print ("Wrote output to", name)
+	except IndexError:
+		print("An error as occured: No file to analyse")
