@@ -119,6 +119,7 @@ def compile(self):
 	return c_code
 
 def convert_string_variables(str):
+	str = str.replace("\"", "")
 	regex = re.compile("\$[A-Za-z_]{1}[A-Za-z0-9_]*")
 	result = regex.findall(str)
 	replace_list = []
@@ -139,11 +140,12 @@ def convert_string_variables(str):
 	for i, variable in enumerate(result):
 		str = regex.sub(replace_list[i], str)
 
+
 	# Créer la string valide pour le printf : STRING, PARAMETRE, PARAMETRES, etc...
-	code_c = str
+	code_c = f"\"{str}\""
 	for variable in result:
 		var_name = variable[1::]
-		code_c += f",{vars[var_name][1]}"
+		code_c += f",{var_name}"
 
 	return code_c
 
