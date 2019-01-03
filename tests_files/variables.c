@@ -3,11 +3,11 @@
 int main()
 {
 	char STR[] = "hello world !";
-	printf(STR);
+	printf("%s",STR);
 	float FNUMBER = 3.6;
-	printf(FNUMBER);
+	printf("%f",FNUMBER);
 	int INUMBER = 33;
-	printf(INUMBER);
+	printf("%d",INUMBER);
 	char *RESTR = STR;
-	printf(RESTR);
+	printf("%s",RESTR);
 }
