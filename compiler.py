@@ -92,9 +92,10 @@ def compile(self):
 		elif isinstance(affectation_node, AST.VariableNode):
 			vars[var_name] = [vars[affectation][0], affectation]
 			c_code += f"{vars[affectation][0]} "
-			c_code += f"{var_name}";
 			if vars[affectation][0] == VarType.STRING:
-				c_code += "[]"
+				c_code += "*"
+			c_code += f"{var_name}";
+
 
 	# Ecrit le code correspondant à une assignation
 	c_code += f" = {affectation};\n"
