@@ -101,6 +101,9 @@ def compile(self):
 			if vars[affectation][0] == VarType.STRING:
 				c_code += "*"
 			c_code += f"{var_name}"
+	else:
+		c_code +=  f"{var_name}"
+	
 
 	# Ecrit le code correspondant à une assignation
 	c_code += f" = {affectation};\n"

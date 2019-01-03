@@ -151,7 +151,7 @@ class OpNode(Node):
             self.nbargs = 1
 
     def __repr__(self):
-        return "%s (%s)" % (self.op, self.nbargs)
+        return "%s" % (self.op)
 
 class IntDeclareNode(Node):
     type = 'declare_int'
