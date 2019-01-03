@@ -28,7 +28,7 @@ def p_statement(p):
 
 def p_statement_affectation(p):
     ''' affectation : SET_VARIABLE '=' expression '''
-    p[0] = AST.AssignNode([AST.TokenNode(p[1]), p[3]])
+    p[0] = AST.AssignNode([AST.VariableNode(p[1]), p[3]])
 
 
 def p_echo(p):
@@ -38,7 +38,7 @@ def p_echo(p):
 
 def p_expression_var(p):
     ''' expression : GET_VARIABLE '''
-    p[0] = AST.TokenNode(p[1])
+    p[0] = AST.VariableNode(p[1])
 
 
 def p_expression_val(p):
