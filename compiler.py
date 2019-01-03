@@ -142,7 +142,7 @@ def convert_string_variables(str):
 	for i, variable in enumerate(result):
 		str = regex.sub(replace_list[i], str)
 	# Créer la string valide pour le printf : STRING, PARAMETRE, PARAMETRES, etc...
-	code_c = f"\"{str}\""
+	code_c = f"\"{str}\\n\""
 	for variable in result:
 		var_name = variable[1::]
 		code_c += f",{var_name}"
