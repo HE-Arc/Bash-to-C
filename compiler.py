@@ -3,7 +3,7 @@
 
 import AST
 from AST import addToClass
-from tools import *
+import re
 
 '''
 Create the basic c structure
@@ -96,7 +96,6 @@ def compile(self):
 				c_code += "*"
 			c_code += f"{var_name}";
 
-
 	# Ecrit le code correspondant à une assignation
 	c_code += f" = {affectation};\n"
 
@@ -110,9 +109,38 @@ def compile(self):
 	c_code = ""
 	c_code += "printf("
 	node = self.children[0]
-	c_code += node.compile()
+	c_code += convert_string_variables(str(node.tok))
 	c_code += ");\n"
 	return c_code
+
+def convert_string_variables(str):
+	regex = re.compile("\$[A-Za-z_]{1}[A-Za-z0-9]*")
+	result = regex.findall(str)
+	replace_list = []
+
+	# Recherche toutes les variables à l'intérieur de la string
+	# et vérifie par la même occasion leur type
+	for variable in result:
+		var_name = variable[1::]
+		type = vars[var_name][0]
+		if type == VarType.INT:
+			replace_list.append("%d")
+		elif type == VarType.FLOAT:
+			replace_list.append("%f")
+		elif type == VarType.STRING:
+			replace_list.append("%s")
+
+	# Remplace toutes les variables à l'intérieur de la string
+	for i, variable in enumerate(result):
+		str = regex.sub(replace_list[i], str)
+
+	# Créer la string valide pour le printf : STRING, PARAMETRE, PARAMETRES, etc...
+	code_c = str
+	for variable in result:
+		var_name = variable[1::]
+		code_c += f",{vars[var_name][1]}"
+
+	return code_c
 
 # noeud de boucle while
 # todo
