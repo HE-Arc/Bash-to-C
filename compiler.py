@@ -123,7 +123,6 @@ def convert_string_variables(str):
 	regex = re.compile("\$[A-Za-z_]{1}[A-Za-z0-9_]*")
 	result = regex.findall(str)
 	replace_list = []
-
 	# Recherche toutes les variables à l'intérieur de la string
 	# et vérifie par la même occasion leur type
 	for variable in result:
@@ -135,18 +134,15 @@ def convert_string_variables(str):
 			replace_list.append("%f")
 		elif type == VarType.STRING:
 			replace_list.append("%s")
-
 	# Remplace toutes les variables à l'intérieur de la string
 	for i, variable in enumerate(result):
 		str = regex.sub(replace_list[i], str)
-
-
 	# Créer la string valide pour le printf : STRING, PARAMETRE, PARAMETRES, etc...
 	code_c = f"\"{str}\""
 	for variable in result:
 		var_name = variable[1::]
 		code_c += f",{var_name}"
-
+	# Retourne la string convertie
 	return code_c
 
 
