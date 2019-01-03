@@ -7,6 +7,18 @@ import ply.lex as lex
 TODO basic
 '''
 
+reserved_words_c = (
+	'auto',	'else',	'long',	'switch',
+	'break',	'enum',	'register',	'typedef',
+	'case',	'extern',	'return',	'union',
+	'char',	'float',	'short',	'unsigned',
+	'const',	'for',	'signed',	'void',
+	'continue',	'goto',	'sizeof',	'volatile',
+	'default',	'if',	'static',	'while',
+	'do',	'int',	'struct',	'_Packed',
+	'double',
+)
+
 reserved_words = (
 	'echo',
 	# Conditions if
@@ -15,7 +27,6 @@ reserved_words = (
 	'else',
 	'fi',
 )
-
 
 tokens = (
 	# Variables
@@ -62,13 +73,19 @@ def t_STRING(t):
 
 def t_GET_VARIABLE(t):
 	r'\$[A-Za-z_]{1}[A-Za-z0-9]*'
+	#print(f"----- t: {t} ----")
+	if t.value[1::] in reserved_words_c:
+		t.value = '$var_' + t.value[1::]
 	return t
 
 
 def t_SET_VARIABLE(t):
 	r'[A-Za-z_]{1}[A-Za-z0-9]*'
+	#print(f"----- t: {t} ----")
 	if t.value in reserved_words:
 		t.type = t.value.upper()
+	if t.value in reserved_words_c:
+		t.value = 'var_' + t.value
 	return t
 
 
