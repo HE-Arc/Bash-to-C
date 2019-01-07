@@ -222,11 +222,12 @@ def compile(self):
 	return c_code
 
 if __name__ == "__main__":
-	from parser_bash import parse, header_found
+	from parser_bash import parse
 	import sys, os
 	try:
 		prog = open(sys.argv[1]).read()
 		ast = parse(prog)
+		from parser_bash import header_found
 		if not header_found:
 			print("WARNING: No Header found")
 
@@ -238,3 +239,9 @@ if __name__ == "__main__":
 		print ("Wrote output to", name)
 	except IndexError:
 		print("An error as occured: No file to analyse")
+	except SyntaxError as se:
+		print(se)
+	except AttributeError as ae:
+		print("Error : file is invalid")
+	except FileNotFoundError as fnfe:
+		print(fnfe)

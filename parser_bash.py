@@ -147,5 +147,7 @@ if __name__ == '__main__':
             print('Parsing returned no result!')
     except IndexError:
         print("An error as occured: No file to analyse")
+    except FileNotFoundError as fnfe:
+        print(fnfe)
     except Exception as e:
         print(e)

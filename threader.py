@@ -60,18 +60,26 @@ def thread(tree):
 
 
 if __name__ == "__main__":
-    from parser_bash import parse, header_found
+    from parser_bash import parse
     import sys, os
-    prog = open(sys.argv[1]).read()
-    ast = parse(prog)
-    if not header_found:
-        print("WARNING: No Header found")
-    print(ast)
-    entry = thread(ast)
+    try:
+        prog = open(sys.argv[1]).read()
+        ast = parse(prog)
+        from parser_bash import header_found
+        if not header_found:
+            print("WARNING: No Header found")
+        print(ast)
+        entry = thread(ast)
 
-    graph = ast.makegraphicaltree()
-    entry.threadTree(graph)
+        graph = ast.makegraphicaltree()
+        entry.threadTree(graph)
 
-    name = os.path.splitext(sys.argv[1])[0]+'-ast-threaded.pdf'
-    graph.write_pdf(name)
-    print ("wrote threaded ast to", name)
+        name = os.path.splitext(sys.argv[1])[0]+'-ast-threaded.pdf'
+        graph.write_pdf(name)
+        print ("wrote threaded ast to", name)
+    except SyntaxError as se:
+        print(se)
+    except AttributeError as ae:
+        print("Error : file is invalid")
+    except FileNotFoundError as fnfe:
+        print(fnfe)

@@ -151,3 +151,5 @@ if __name__ == "__main__":
 
 	except IndexError as e:
 		print("An error as occured: No file to analyse")
+	except FileNotFoundError as fnfe:
+		print(fnfe)

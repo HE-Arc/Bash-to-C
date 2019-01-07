@@ -1,3 +1,4 @@
+#!bin/bash
 if [1 -ne 3]
 then
   echo "a and c are not equal !"
