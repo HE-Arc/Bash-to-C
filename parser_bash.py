@@ -104,6 +104,14 @@ def p_until(p):
     ''' statement : UNTIL '[' expression ']' ';' DO newline block DONE '''
     p[0] = AST.UntilNode([p[3], p[8]])
 
+def p_for(p):
+    ''' statement : FOR SET_VARIABLE IN '{' INT '.' '.' INT '}' DO newline block DONE '''
+    var1 = AST.VariableNode(p[2])
+    var2 = AST.VariableNode(p[2])
+    init_var = AST.AssignNode([var1, AST.IntNode(int(p[5]))])
+    condition = AST.CmpNode('-lt', [var2, AST.IntNode(int(p[8]))])
+    p[0] = AST.ForNode([init_var, condition, p[12]])
+
 def p_error(p):
     if p:
         print('Syntax error in line %d' % p.lineno)

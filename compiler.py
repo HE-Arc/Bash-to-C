@@ -114,7 +114,7 @@ def compile(self):
 			c_code += f"{var_name}"
 	else:
 		c_code +=  f"{var_name}"
-	
+
 
 	# Ecrit le code correspondant à une assignation
 	c_code += f" = {affectation};\n"
@@ -212,6 +212,13 @@ def compile(self):
 	c_code = ""
 	c_code += f"while(!({self.children[0].compile()}))"
 	c_code += f"{self.children[1].compile()}\n"	#----------------------
+	return c_code
+
+@addToClass(AST.ForNode)
+def compile(self):
+	c_code = ""
+	c_code += f"for({self.children[0].compile()};{self.children[1].compile()};)"
+	c_code += f"{self.children[1].compile()}\n"
 	return c_code
 
 if __name__ == "__main__":
