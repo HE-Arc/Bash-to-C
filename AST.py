@@ -174,6 +174,9 @@ class WhileNode(Node):
 class UntilNode(Node):
     type = 'until'
 
+class ForNode(Node):
+    type = 'For'
+
 class CondNode(Node):
     type = 'if'
 
