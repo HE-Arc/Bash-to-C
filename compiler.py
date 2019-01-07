@@ -12,6 +12,13 @@ Create the basic c structure
 # Dictionnaire comportant les variables du programme, sous cette forme: {NOM_VAR:[TYPE, VALEUR], ...}
 vars = dict()
 
+# Static var that represents the number of indentation for the next line to write
+indentation_level = 0
+
+def indentation_generator():
+	''' return the tabs string to place after a newline'''
+	return "\t" * indentation_level
+
 comparators = {
 	'-eq' : '==',
 	'-ne' : '!=',
@@ -28,12 +35,16 @@ class VarType:
 @addToClass(AST.ProgramNode)
 def compile(self):
 	c_code = ""
+	global indentation_level
+	indentation_level = 0
 	c_code += "#include <stdio.h>\n"
 	c_code += "\n"
 	c_code += "int main()\n"
 	c_code += "{\n"
+	indentation_level += 1
+	_identation = indentation_generator()
 	for c in self.children:
-		c_code += "\t"
+		c_code += _identation
 		c_code += c.compile()
 	c_code += "}"
 	return c_code
@@ -161,10 +172,13 @@ def compile(self):
 @addToClass(AST.CondNode)
 def compile(self):
 	c_code = ""
+	global indentation_level
+	_identation = indentation_generator()
+
 	c_code += f"if ({self.children[0].compile()})\n"
 	c_code += f"{self.children[1].compile()}\n"
 	if len(self.children) > 2 :
-		c_code += "\telse\n"
+		c_code += _identation + "else\n"		#----------------------
 		c_code += f"{self.children[2].compile()}\n"
 	return c_code
 
@@ -172,25 +186,32 @@ def compile(self):
 @addToClass(AST.BlockNode)
 def compile(self):
 	c_code = ""
-	c_code += "\t{\n"
+	global indentation_level
+	_identation = indentation_generator()
+	
+	c_code += _identation + "{\n"
+	indentation_level += 1
+	_identation = indentation_generator()
 	for c in self.children:
-		c_code += "\t\t"
+		c_code += _identation
 		c_code += c.compile()
-	c_code += "\t}"
+	indentation_level -= 1
+	_identation = indentation_generator()
+	c_code += _identation + "}"
 	return c_code
 
 @addToClass(AST.WhileNode)
 def compile(self):
 	c_code = ""
 	c_code += f"while({self.children[0].compile()})"
-	c_code += f"{self.children[1].compile()}\n"
+	c_code += f"{self.children[1].compile()}\n"	#----------------------
 	return c_code
 
 @addToClass(AST.UntilNode)
 def compile(self):
 	c_code = ""
 	c_code += f"while(!({self.children[0].compile()}))"
-	c_code += f"{self.children[1].compile()}\n"
+	c_code += f"{self.children[1].compile()}\n"	#----------------------
 	return c_code
 
 if __name__ == "__main__":
