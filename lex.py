@@ -59,7 +59,7 @@ literals = '$()=[];'
 
 
 def t_HEADER(t):
-	r'^(\#\!\/bin\/bash)'
+	r'^\#\!bin\/bash'
 	return t
 
 

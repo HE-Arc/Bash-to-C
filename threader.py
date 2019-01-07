@@ -50,10 +50,12 @@ def thread(tree):
 
 
 if __name__ == "__main__":
-    from parser_bash import parse
+    from parser_bash import parse, header_found
     import sys, os
     prog = open(sys.argv[1]).read()
     ast = parse(prog)
+    if not header_found:
+        print("WARNING: No Header found")
     print(ast)
     entry = thread(ast)
 

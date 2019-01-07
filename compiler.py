@@ -188,7 +188,7 @@ def compile(self):
 	c_code = ""
 	global indentation_level
 	_identation = indentation_generator()
-	
+
 	c_code += _identation + "{\n"
 	indentation_level += 1
 	_identation = indentation_generator()
@@ -215,11 +215,13 @@ def compile(self):
 	return c_code
 
 if __name__ == "__main__":
-	from parser_bash import parse
+	from parser_bash import parse, header_found
 	import sys, os
 	try:
 		prog = open(sys.argv[1]).read()
 		ast = parse(prog)
+		if not header_found:
+			print("WARNING: No Header found")
 
 		compiled = ast.compile()
 		name = os.path.splitext(sys.argv[1])[0]+'.c'
