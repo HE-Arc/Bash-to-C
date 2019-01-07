@@ -29,6 +29,8 @@ reserved_words = (
 	# boucles
 	'while',
 	'until',
+	'for',
+	'in',
 	'do',
 	'done',
 )
@@ -55,7 +57,7 @@ tokens = (
 ) + tuple(map(lambda s:s.upper(),reserved_words))
 
 
-literals = '$()=[];'
+literals = '$()=[];{}.'
 
 
 def t_HEADER(t):
