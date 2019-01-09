@@ -99,15 +99,15 @@ def t_SET_VARIABLE(t):
 
 
 def t_EQ_CMP(t):
-	r'-eq'
+	r'-eq|-EQ'
 	return t
 
 def t_NE_CMP(t):
-	r'-ne'
+	r'-ne|-NE'
 	return t
 
 def t_LT_CMP(t):
-	r'-lt'
+	r'-lt|-LT'
 	return t
 
 
