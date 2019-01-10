@@ -188,7 +188,7 @@ def compile(self):
 	c_code = ""
 	global indentation_level
 	_identation = indentation_generator()
-	
+
 	c_code += _identation + "{\n"
 	indentation_level += 1
 	_identation = indentation_generator()
@@ -227,6 +227,9 @@ if __name__ == "__main__":
 	try:
 		prog = open(sys.argv[1]).read()
 		ast = parse(prog)
+		from parser_bash import header_found
+		if not header_found:
+			print("WARNING: No Header found")
 
 		compiled = ast.compile()
 		name = os.path.splitext(sys.argv[1])[0]+'.c'
@@ -236,3 +239,9 @@ if __name__ == "__main__":
 		print ("Wrote output to", name)
 	except IndexError:
 		print("An error as occured: No file to analyse")
+	except SyntaxError as se:
+		print(se)
+	except AttributeError as ae:
+		print("Error : file is invalid")
+	except FileNotFoundError as fnfe:
+		print(fnfe)

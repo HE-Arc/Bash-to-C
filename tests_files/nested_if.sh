@@ -1,3 +1,4 @@
+#!bin/bash
 if [ 2 -ne 3 ]
 then
   if [ 2 -lt 3 ]

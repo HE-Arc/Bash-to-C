@@ -7,18 +7,37 @@ from lex import tokens
 import AST
 from tools import *
 
-
 vars = {}
+header_found = False
 
+precedence = (
+    ('left', 'ADD_OP'),
+    ('left', 'MUL_OP'),
+    ('left', 'EQ_CMP'),
+    ('left', 'NE_CMP'),
+    ('left', 'LT_CMP'),
+)
 
 def p_programme_statement(p):
-    ''' programme : statement newline '''
-    p[0] = AST.ProgramNode(p[1])
+    ''' programme : HEADER newline statement newline
+        | statement newline'''
+    global header_found
+    if len(p) == 5 :
+        header_found = True
+        p[0] = AST.ProgramNode(p[3])
+    else:
+        p[0] = AST.ProgramNode(p[1])
 
 
 def p_programme_recursive(p):
-    ''' programme : statement newline programme '''
-    p[0] = AST.ProgramNode([p[1]]+p[3].children)
+    ''' programme : HEADER newline statement newline programme
+        | statement newline programme '''
+    global header_found
+    if len(p) == 6 :
+        header_found = True
+        p[0] = AST.ProgramNode([p[3]]+p[5].children)
+    else:
+        p[0] = AST.ProgramNode([p[1]]+p[3].children)
 
 
 def p_statement(p):
@@ -120,8 +139,10 @@ if __name__ == '__main__':
     import sys
     try:
         prog = open(sys.argv[1]).read()
-        result = yacc.parse(prog, debug=True)
+        result = yacc.parse(prog, debug=False)
         if result:
+            if not header_found:
+                print(f"WARNING: No Header found")
             print(result)
 
             import os
@@ -133,3 +154,7 @@ if __name__ == '__main__':
             print('Parsing returned no result!')
     except IndexError:
         print("An error as occured: No file to analyse")
+    except FileNotFoundError as fnfe:
+        print(fnfe)
+    except Exception as e:
+        print(e)

@@ -61,7 +61,7 @@ literals = '$()=[];{}.'
 
 
 def t_HEADER(t):
-	r'^(\#\!\/bin\/bash)'
+	r'^\#\!bin\/bash'
 	return t
 
 
@@ -99,15 +99,15 @@ def t_SET_VARIABLE(t):
 
 
 def t_EQ_CMP(t):
-	r'-eq'
+	r'-eq|-EQ'
 	return t
 
 def t_NE_CMP(t):
-	r'-ne'
+	r'-ne|-NE'
 	return t
 
 def t_LT_CMP(t):
-	r'-lt'
+	r'-lt|-LT'
 	return t
 
 
@@ -151,3 +151,5 @@ if __name__ == "__main__":
 
 	except IndexError as e:
 		print("An error as occured: No file to analyse")
+	except FileNotFoundError as fnfe:
+		print(fnfe)

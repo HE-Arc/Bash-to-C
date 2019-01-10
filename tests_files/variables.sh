@@ -1,3 +1,4 @@
+#!bin/bash
 STR="hello world !"
 echo $STR
 FNUMBER=3.6

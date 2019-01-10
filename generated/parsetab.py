@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = "ADD_OP DO DONE ECHO ELSE EQ_CMP FI FLOAT GET_VARIABLE HEADER IF INT LT_CMP MUL_OP NE_CMP SET_VARIABLE STRING THEN UNTIL WHILE newline programme : statement newline  programme : statement newline programme  statement : affectation  affectation : SET_VARIABLE '=' expression  statement : ECHO expression  expression : GET_VARIABLE  expression : FLOAT\n        | INT\n        | STRING  expression : '$' '(' '(' expression ADD_OP expression ')' ')'\n                    | '$' '(' '(' expression MUL_OP expression ')' ')'  expression : expression EQ_CMP expression\n                    | expression NE_CMP expression\n                    | expression LT_CMP expression  block : statement newline  block : statement newline block  statement : IF '[' expression ']' newline THEN newline block FI  statement : IF '[' expression ']' newline THEN newline block ELSE newline block FI  statement : WHILE '[' expression ']' ';' DO newline block DONE  statement : UNTIL '[' expression ']' ';' DO newline block DONE "
+_lr_signature = "ADD_OP DO DONE ECHO ELSE EQ_CMP FI FLOAT FOR GET_VARIABLE HEADER IF IN INT LT_CMP MUL_OP NE_CMP SET_VARIABLE STRING THEN UNTIL WHILE newline programme : HEADER newline statement newline \n        | statement newline programme : HEADER newline statement newline programme \n        | statement newline programme  statement : affectation  affectation : SET_VARIABLE '=' expression  statement : ECHO expression  expression : GET_VARIABLE  expression : FLOAT\n        | INT\n        | STRING  expression : '$' '(' '(' expression ADD_OP expression ')' ')'\n                    | '$' '(' '(' expression MUL_OP expression ')' ')'  expression : expression EQ_CMP expression\n                    | expression NE_CMP expression\n                    | expression LT_CMP expression  block : statement newline  block : statement newline block  statement : IF '[' expression ']' newline THEN newline block FI  statement : IF '[' expression ']' newline THEN newline block ELSE newline block FI  statement : WHILE '[' expression ']' ';' DO newline block DONE  statement : UNTIL '[' expression ']' ';' DO newline block DONE  statement : FOR SET_VARIABLE IN '{' INT '.' '.' INT '}' DO newline block DONE "
     
-_lr_action_items = {'ECHO':([0,9,47,48,49,60,63,],[4,4,4,4,4,4,4,]),'IF':([0,9,47,48,49,60,63,],[5,5,5,5,5,5,5,]),'WHILE':([0,9,47,48,49,60,63,],[6,6,6,6,6,6,6,]),'UNTIL':([0,9,47,48,49,60,63,],[7,7,7,7,7,7,7,]),'SET_VARIABLE':([0,9,47,48,49,60,63,],[8,8,8,8,8,8,8,]),'$end':([1,9,20,],[0,-1,-2,]),'newline':([2,3,10,11,12,13,14,28,29,30,31,33,42,43,44,53,56,57,58,59,61,62,66,],[9,-3,-5,-6,-7,-8,-9,-4,-12,-13,-14,37,47,48,49,60,-10,-11,-17,63,-19,-20,-18,]),'GET_VARIABLE':([4,16,17,18,19,21,22,23,32,40,41,],[11,11,11,11,11,11,11,11,11,11,11,]),'FLOAT':([4,16,17,18,19,21,22,23,32,40,41,],[12,12,12,12,12,12,12,12,12,12,12,]),'INT':([4,16,17,18,19,21,22,23,32,40,41,],[13,13,13,13,13,13,13,13,13,13,13,]),'STRING':([4,16,17,18,19,21,22,23,32,40,41,],[14,14,14,14,14,14,14,14,14,14,14,]),'$':([4,16,17,18,19,21,22,23,32,40,41,],[15,15,15,15,15,15,15,15,15,15,15,]),'[':([5,6,7,],[16,17,18,]),'=':([8,],[19,]),'EQ_CMP':([10,11,12,13,14,25,26,27,28,29,30,31,36,45,46,56,57,],[21,-6,-7,-8,-9,21,21,21,21,21,21,21,21,21,21,-10,-11,]),'NE_CMP':([10,11,12,13,14,25,26,27,28,29,30,31,36,45,46,56,57,],[22,-6,-7,-8,-9,22,22,22,22,22,22,22,22,22,22,-10,-11,]),'LT_CMP':([10,11,12,13,14,25,26,27,28,29,30,31,36,45,46,56,57,],[23,-6,-7,-8,-9,23,23,23,23,23,23,23,23,23,23,-10,-11,]),']':([11,12,13,14,25,26,27,29,30,31,56,57,],[-6,-7,-8,-9,33,34,35,-12,-13,-14,-10,-11,]),'ADD_OP':([11,12,13,14,29,30,31,36,56,57,],[-6,-7,-8,-9,-12,-13,-14,40,-10,-11,]),'MUL_OP':([11,12,13,14,29,30,31,36,56,57,],[-6,-7,-8,-9,-12,-13,-14,41,-10,-11,]),')':([11,12,13,14,29,30,31,45,46,50,51,56,57,],[-6,-7,-8,-9,-12,-13,-14,50,51,56,57,-10,-11,]),'(':([15,24,],[24,32,]),';':([34,35,],[38,39,]),'THEN':([37,],[42,]),'DO':([38,39,],[43,44,]),'FI':([52,60,64,65,],[58,-15,-16,66,]),'ELSE':([52,60,64,],[59,-15,-16,]),'DONE':([54,55,60,64,],[61,62,-15,-16,]),}
+_lr_action_items = {'HEADER':([0,12,35,],[2,2,2,]),'ECHO':([0,11,12,35,58,59,60,73,77,81,],[5,5,5,5,5,5,5,5,5,5,]),'IF':([0,11,12,35,58,59,60,73,77,81,],[6,6,6,6,6,6,6,6,6,6,]),'WHILE':([0,11,12,35,58,59,60,73,77,81,],[7,7,7,7,7,7,7,7,7,7,]),'UNTIL':([0,11,12,35,58,59,60,73,77,81,],[8,8,8,8,8,8,8,8,8,8,]),'FOR':([0,11,12,35,58,59,60,73,77,81,],[9,9,9,9,9,9,9,9,9,9,]),'SET_VARIABLE':([0,9,11,12,35,58,59,60,73,77,81,],[10,22,10,10,10,10,10,10,10,10,10,]),'$end':([1,12,25,35,44,],[0,-2,-4,-1,-3,]),'newline':([2,3,4,13,14,15,16,17,24,34,36,37,38,40,52,53,54,65,69,70,71,72,74,75,79,82,84,],[11,12,-5,-7,-8,-9,-10,-11,35,-6,-14,-15,-16,46,58,59,60,73,-12,-13,-19,77,-21,-22,81,-20,-23,]),'GET_VARIABLE':([5,19,20,21,23,26,27,28,39,50,51,],[14,14,14,14,14,14,14,14,14,14,14,]),'FLOAT':([5,19,20,21,23,26,27,28,39,50,51,],[15,15,15,15,15,15,15,15,15,15,15,]),'INT':([5,19,20,21,23,26,27,28,39,43,50,51,61,],[16,16,16,16,16,16,16,16,16,49,16,16,68,]),'STRING':([5,19,20,21,23,26,27,28,39,50,51,],[17,17,17,17,17,17,17,17,17,17,17,]),'$':([5,19,20,21,23,26,27,28,39,50,51,],[18,18,18,18,18,18,18,18,18,18,18,]),'[':([6,7,8,],[19,20,21,]),'=':([10,],[23,]),'EQ_CMP':([13,14,15,16,17,30,31,32,34,36,37,38,45,56,57,69,70,],[26,-8,-9,-10,-11,26,26,26,26,26,26,26,26,26,26,-12,-13,]),'NE_CMP':([13,14,15,16,17,30,31,32,34,36,37,38,45,56,57,69,70,],[27,-8,-9,-10,-11,27,27,27,27,27,27,27,27,27,27,-12,-13,]),'LT_CMP':([13,14,15,16,17,30,31,32,34,36,37,38,45,56,57,69,70,],[28,-8,-9,-10,-11,28,28,28,28,28,28,28,28,28,28,-12,-13,]),']':([14,15,16,17,30,31,32,36,37,38,69,70,],[-8,-9,-10,-11,40,41,42,-14,-15,-16,-12,-13,]),'ADD_OP':([14,15,16,17,36,37,38,45,69,70,],[-8,-9,-10,-11,-14,-15,-16,50,-12,-13,]),'MUL_OP':([14,15,16,17,36,37,38,45,69,70,],[-8,-9,-10,-11,-14,-15,-16,51,-12,-13,]),')':([14,15,16,17,36,37,38,56,57,62,63,69,70,],[-8,-9,-10,-11,-14,-15,-16,62,63,69,70,-12,-13,]),'(':([18,29,],[29,39,]),'IN':([22,],[33,]),'{':([33,],[43,]),';':([41,42,],[47,48,]),'THEN':([46,],[52,]),'DO':([47,48,76,],[53,54,79,]),'.':([49,55,],[55,61,]),'FI':([64,73,78,80,],[71,-17,-18,82,]),'ELSE':([64,73,78,],[72,-17,-18,]),'DONE':([66,67,73,78,83,],[74,75,-17,-18,84,]),'}':([68,],[76,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'programme':([0,9,],[1,20,]),'statement':([0,9,47,48,49,60,63,],[2,2,53,53,53,53,53,]),'affectation':([0,9,47,48,49,60,63,],[3,3,3,3,3,3,3,]),'expression':([4,16,17,18,19,21,22,23,32,40,41,],[10,25,26,27,28,29,30,31,36,45,46,]),'block':([47,48,49,60,63,],[52,54,55,64,65,]),}
+_lr_goto_items = {'programme':([0,12,35,],[1,25,44,]),'statement':([0,11,12,35,58,59,60,73,77,81,],[3,24,3,3,65,65,65,65,65,65,]),'affectation':([0,11,12,35,58,59,60,73,77,81,],[4,4,4,4,4,4,4,4,4,4,]),'expression':([5,19,20,21,23,26,27,28,39,50,51,],[13,30,31,32,34,36,37,38,45,56,57,]),'block':([58,59,60,73,77,81,],[64,66,67,78,80,83,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,24 +27,27 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> programme","S'",1,None,None,None),
-  ('programme -> statement newline','programme',2,'p_programme_statement','parser_bash.py',15),
-  ('programme -> statement newline programme','programme',3,'p_programme_recursive','parser_bash.py',20),
-  ('statement -> affectation','statement',1,'p_statement','parser_bash.py',25),
-  ('affectation -> SET_VARIABLE = expression','affectation',3,'p_statement_affectation','parser_bash.py',30),
-  ('statement -> ECHO expression','statement',2,'p_echo','parser_bash.py',35),
-  ('expression -> GET_VARIABLE','expression',1,'p_expression_var','parser_bash.py',40),
-  ('expression -> FLOAT','expression',1,'p_expression_val','parser_bash.py',45),
-  ('expression -> INT','expression',1,'p_expression_val','parser_bash.py',46),
-  ('expression -> STRING','expression',1,'p_expression_val','parser_bash.py',47),
-  ('expression -> $ ( ( expression ADD_OP expression ) )','expression',8,'p_expression_op','parser_bash.py',57),
-  ('expression -> $ ( ( expression MUL_OP expression ) )','expression',8,'p_expression_op','parser_bash.py',58),
-  ('expression -> expression EQ_CMP expression','expression',3,'p_expression_cmp','parser_bash.py',63),
-  ('expression -> expression NE_CMP expression','expression',3,'p_expression_cmp','parser_bash.py',64),
-  ('expression -> expression LT_CMP expression','expression',3,'p_expression_cmp','parser_bash.py',65),
-  ('block -> statement newline','block',2,'p_block','parser_bash.py',70),
-  ('block -> statement newline block','block',3,'p_block_recurssive','parser_bash.py',74),
-  ('statement -> IF [ expression ] newline THEN newline block FI','statement',9,'p_condition_if','parser_bash.py',79),
-  ('statement -> IF [ expression ] newline THEN newline block ELSE newline block FI','statement',12,'p_condition_if_else','parser_bash.py',84),
-  ('statement -> WHILE [ expression ] ; DO newline block DONE','statement',9,'p_while','parser_bash.py',88),
-  ('statement -> UNTIL [ expression ] ; DO newline block DONE','statement',9,'p_until','parser_bash.py',92),
+  ('programme -> HEADER newline statement newline','programme',4,'p_programme_statement','parser_bash.py',15),
+  ('programme -> statement newline','programme',2,'p_programme_statement','parser_bash.py',16),
+  ('programme -> HEADER newline statement newline programme','programme',5,'p_programme_recursive','parser_bash.py',26),
+  ('programme -> statement newline programme','programme',3,'p_programme_recursive','parser_bash.py',27),
+  ('statement -> affectation','statement',1,'p_statement','parser_bash.py',37),
+  ('affectation -> SET_VARIABLE = expression','affectation',3,'p_statement_affectation','parser_bash.py',42),
+  ('statement -> ECHO expression','statement',2,'p_echo','parser_bash.py',47),
+  ('expression -> GET_VARIABLE','expression',1,'p_expression_var','parser_bash.py',52),
+  ('expression -> FLOAT','expression',1,'p_expression_val','parser_bash.py',57),
+  ('expression -> INT','expression',1,'p_expression_val','parser_bash.py',58),
+  ('expression -> STRING','expression',1,'p_expression_val','parser_bash.py',59),
+  ('expression -> $ ( ( expression ADD_OP expression ) )','expression',8,'p_expression_op','parser_bash.py',69),
+  ('expression -> $ ( ( expression MUL_OP expression ) )','expression',8,'p_expression_op','parser_bash.py',70),
+  ('expression -> expression EQ_CMP expression','expression',3,'p_expression_cmp','parser_bash.py',75),
+  ('expression -> expression NE_CMP expression','expression',3,'p_expression_cmp','parser_bash.py',76),
+  ('expression -> expression LT_CMP expression','expression',3,'p_expression_cmp','parser_bash.py',77),
+  ('block -> statement newline','block',2,'p_block','parser_bash.py',82),
+  ('block -> statement newline block','block',3,'p_block_recurssive','parser_bash.py',86),
+  ('statement -> IF [ expression ] newline THEN newline block FI','statement',9,'p_condition_if','parser_bash.py',91),
+  ('statement -> IF [ expression ] newline THEN newline block ELSE newline block FI','statement',12,'p_condition_if_else','parser_bash.py',96),
+  ('statement -> WHILE [ expression ] ; DO newline block DONE','statement',9,'p_while','parser_bash.py',100),
+  ('statement -> UNTIL [ expression ] ; DO newline block DONE','statement',9,'p_until','parser_bash.py',104),
+  ('statement -> FOR SET_VARIABLE IN { INT . . INT } DO newline block DONE','statement',13,'p_for','parser_bash.py',108),
 ]
