@@ -217,8 +217,8 @@ def compile(self):
 @addToClass(AST.ForNode)
 def compile(self):
 	c_code = ""
-	c_code += f"for({self.children[0].compile()};{self.children[1].compile()};)"
-	c_code += f"{self.children[1].compile()}\n"
+	c_code += f"for({self.children[0].compile()[:-2]};{self.children[1].compile()};{self.children[2].compile()[:-2]})\n"
+	c_code += f"{self.children[3].compile()}\n"
 	return c_code
 
 if __name__ == "__main__":
@@ -243,5 +243,6 @@ if __name__ == "__main__":
 		print(se)
 	except AttributeError as ae:
 		print("Error : file is invalid")
+		print(ae)
 	except FileNotFoundError as fnfe:
 		print(fnfe)

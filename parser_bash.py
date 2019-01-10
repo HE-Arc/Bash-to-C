@@ -112,12 +112,15 @@ def p_until(p):
     p[0] = AST.UntilNode([p[3], p[8]])
 
 def p_for(p):
-    ''' statement : FOR SET_VARIABLE IN '{' INT '.' '.' INT '}' DO newline block DONE '''
+    ''' statement : FOR SET_VARIABLE IN '{' INT '.' '.' INT '}' ';' DO newline block DONE '''
     var1 = AST.VariableNode(p[2])
-    var2 = AST.VariableNode(p[2])
+    var2 = AST.VariableNode("$"+p[2])       # Dans ce cas, on obtient la valeur donc GET
+    var3 = AST.VariableNode("$"+p[2])       # Dans ce cas, on obtient la valeur donc GET
+    var4 = AST.VariableNode(p[2])
+    inc = AST.AssignNode([var4, AST.OpNode('+', [var3, AST.IntNode(1)])])
     init_var = AST.AssignNode([var1, AST.IntNode(int(p[5]))])
-    condition = AST.CmpNode('-lt', [var2, AST.IntNode(int(p[8]))])
-    p[0] = AST.ForNode([init_var, condition, p[12]])
+    condition = AST.CmpNode('-lt', [var2, AST.IntNode(int(p[8])+1)])
+    p[0] = AST.ForNode([init_var, condition, inc, p[13]])
 
 def p_error(p):
     if p:
