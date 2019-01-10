@@ -7,12 +7,19 @@ from lex import tokens
 import AST
 from tools import *
 
-
 vars = {}
 header_found = False
 
+precedence = (
+    ('left', 'ADD_OP'),
+    ('left', 'MUL_OP'),
+    ('left', 'EQ_CMP'),
+    ('left', 'NE_CMP'),
+    ('left', 'LT_CMP'),
+)
+
 def p_programme_statement(p):
-    ''' programme : HEADER newline statement newline 
+    ''' programme : HEADER newline statement newline
         | statement newline'''
     global header_found
     if len(p) == 5 :
@@ -23,7 +30,7 @@ def p_programme_statement(p):
 
 
 def p_programme_recursive(p):
-    ''' programme : HEADER newline statement newline programme 
+    ''' programme : HEADER newline statement newline programme
         | statement newline programme '''
     global header_found
     if len(p) == 6 :
