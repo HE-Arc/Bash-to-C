@@ -3,10 +3,6 @@
 
 import ply.lex as lex
 
-'''
-TODO basic
-'''
-
 reserved_words_c = (
 	'auto',	'else',	'long',	'switch',
 	'break',	'enum',	'register',	'typedef',
@@ -36,7 +32,7 @@ reserved_words = (
 )
 
 tokens = (
-	# Variables
+	# Header
 	'HEADER',
 	# Types
 	'INT',
@@ -82,7 +78,6 @@ def t_STRING(t):
 
 def t_GET_VARIABLE(t):
 	r'\$[A-Za-z_]{1}[A-Za-z0-9_]*'
-	#print(f"----- t: {t} ----")
 	if t.value[1::] in reserved_words_c:
 		t.value = '$var_' + t.value[1::]
 	return t
@@ -90,7 +85,6 @@ def t_GET_VARIABLE(t):
 
 def t_SET_VARIABLE(t):
 	r'[A-Za-z_]{1}[A-Za-z0-9]*'
-	#print(f"----- t: {t} ----")
 	if t.value in reserved_words:
 		t.type = t.value.upper()
 	elif t.value in reserved_words_c:
