@@ -74,14 +74,7 @@ def compile(self):
 	operator = self.op
 	operand_1 = self.children[0].compile()
 	operand_2 = self.children[1].compile()
-	if operator == "+":
-		c_code += f"{operand_1} + {operand_2}"
-	elif operator == "-":
-		c_code += f"{operand_1} - {operand_2}"
-	elif operator == "*":
-		c_code += f"{operand_1} * {operand_2}"
-	elif operator == "/":
-		c_code += f"{operand_1} / {operand_2}"
+	c_code += f"{operand_1} {operator} {operand_2}"
 	return c_code
 
 # noeud d'assignation de variable
