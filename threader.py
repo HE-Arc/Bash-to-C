@@ -40,7 +40,9 @@ def thread(self, lastNode):
     exitInit.addNext(self)
     exitCond = self.children[1].thread(self)
     exitCond.addNext(self)
-    exitBody = self.children[2].thread(self)
+    exitInc = self.children[2].thread(self)
+    exitInc.addNext(self);
+    exitBody = self.children[3].thread(self)
     exitBody.addNext(beforeCond.next[-1])
     return self
 
