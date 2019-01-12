@@ -3,6 +3,7 @@ from AST import addToClass
 
 @addToClass(AST.Node)
 def thread(self, lastNode):
+    ''' Node thread: thread a Node '''
     for c in self.children:
         lastNode = c.thread(lastNode)
     lastNode.addNext(self)
@@ -11,6 +12,7 @@ def thread(self, lastNode):
 
 @addToClass(AST.CondNode)
 def thread(self, lastNode):
+    ''' Cond Node thread: thread a CondNode '''
     exitIfNode = self.children[0].thread(lastNode)
     exitIfNode.addNext(self)
     exitBodyIfNode = self.children[1].thread(self)
@@ -26,6 +28,7 @@ def thread(self, lastNode):
 @addToClass(AST.WhileNode)
 @addToClass(AST.UntilNode)
 def thread(self, lastNode):
+    ''' While/Until Node thread: thread a While/UntilNode '''
     beforeCond = lastNode
     exitCond = self.children[0].thread(lastNode)
     exitCond.addNext(self)
@@ -35,6 +38,7 @@ def thread(self, lastNode):
 
 @addToClass(AST.ForNode)
 def thread(self, lastNode):
+    ''' For Node thread: thread a ForNode '''
     beforeCond = lastNode
     exitInit = self.children[0].thread(lastNode)
     exitInit.addNext(self)
@@ -47,6 +51,7 @@ def thread(self, lastNode):
     return self
 
 def thread(tree):
+    ''' Thread an ASTTree '''
     entry = AST.EntryNode()
     tree.thread(entry)
     return entry
