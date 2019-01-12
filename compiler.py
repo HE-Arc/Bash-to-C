@@ -9,7 +9,7 @@ import re
 Create the basic c structure
 '''
 
-# Dictionnaire comportant les variables du programme, sous cette forme: {NOM_VAR:[TYPE, VALEUR], ...}
+# Dictionary containing the variables of the program like : {NOM_VAR:[TYPE, VALEUR], ...}
 vars = dict()
 
 # Static var that represents the number of indentation for the next line to write
@@ -30,10 +30,11 @@ class VarType:
 	FLOAT = "float"
 	STRING = "char"
 
-# noeud de programme
-# retourne la suite d'opcodes de tous les enfants
 @addToClass(AST.ProgramNode)
 def compile(self):
+	''' Program Node Compilation: 
+		return the c code of the program node and of all its children
+	''' 
 	c_code = ""
 	global indentation_level
 	indentation_level = 0
@@ -49,27 +50,39 @@ def compile(self):
 	c_code += "}"
 	return c_code
 
-# noeud terminal
-# si c'est une variable : todo
-# si c'est une constante : todo
 @addToClass(AST.VariableNode)
 def compile(self):
+	''' Variable Node Compilation: 
+		return the name of the variable
+	'''
 	return self.tok[1::]
 
 @addToClass(AST.IntNode)
 def compile(self):
+	''' Int Node Compilation: 
+		return an int value
+	'''
 	return self.tok
 
 @addToClass(AST.FloatNode)
 def compile(self):
+	''' Int Node Compilation: 
+		return a float value
+	'''
 	return self.tok
 
 @addToClass(AST.StringNode)
 def compile(self):
+	''' String Node Compilation: 
+		return a string value
+	'''
 	return self.tok
 
 @addToClass(AST.OpNode)
 def compile(self):
+	''' Operator Node Compilation: 
+		return the c code of an arithmetic operation
+	'''
 	c_code = ""
 	operator = self.op
 	operand_1 = self.children[0].compile()
@@ -77,11 +90,11 @@ def compile(self):
 	c_code += f"{operand_1} {operator} {operand_2}"
 	return c_code
 
-# noeud d'assignation de variable
-# exécute le noeud à droite du signe =
-# todo
 @addToClass(AST.AssignNode)
 def compile(self):
+	''' Assign Node Compilation: 
+		return the c code of a variable declaration or assignment
+	'''
 	c_code = ""
 	var_name = self.children[0].tok
 	affectation_node = self.children[1]
@@ -108,17 +121,16 @@ def compile(self):
 	else:
 		c_code +=  f"{var_name}"
 
-
-	# Ecrit le code correspondant à une assignation
+	# Write the corresponding code of an assignment
 	c_code += f" = {affectation};\n"
 
 	return c_code
 
-# noeud d'affichage
-# todo
-# todo
 @addToClass(AST.EchoNode)
 def compile(self):
+	''' Echo Node compilation:
+		return the c code of a echo as a print function use
+	'''
 	c_code = ""
 	c_code += "printf("
 	node = self.children[0]
@@ -127,12 +139,16 @@ def compile(self):
 	return c_code
 
 def convert_string_variables(str):
+	'''
+
+	'''
 	str = str.replace("\"", "")
 	regex = re.compile("\$[A-Za-z_]{1}[A-Za-z0-9_]*")
 	result = regex.findall(str)
 	replace_list = []
-	# Recherche toutes les variables à l'intérieur de la string
-	# et vérifie par la même occasion leur type
+
+	# Search all the variables inside the string str
+	# and verify the type in the mean time
 	for variable in result:
 		var_name = variable[1::]
 		type = vars[var_name][0]
@@ -142,20 +158,27 @@ def convert_string_variables(str):
 			replace_list.append("%f")
 		elif type == VarType.STRING:
 			replace_list.append("%s")
-	# Remplace toutes les variables à l'intérieur de la string
+
+	# Replace all the variable insite the string str
 	for i, variable in enumerate(result):
 		str = regex.sub(replace_list[i], str)
-	# Créer la string valide pour le printf : STRING, PARAMETRE, PARAMETRES, etc...
+
+	# Create the valid string for the printf function :
+	# STRING, PARAMETRE, PARAMETRES, etc...
 	code_c = f"\"{str}\\n\""
 	for variable in result:
 		var_name = variable[1::]
 		code_c += f",{var_name}"
-	# Retourne la string convertie
+
+	# Return the converted string
 	return code_c
 
 
 @addToClass(AST.CmpNode)
 def compile(self):
+	''' Comparator Node compilation:
+		return the c code of a comparaison
+	'''
 	c_code = ""
 	cmp = comparators[self.cmp]
 	c_code += f"{self.children[0].compile()} {cmp} {self.children[1].compile()}"
@@ -164,6 +187,9 @@ def compile(self):
 
 @addToClass(AST.CondNode)
 def compile(self):
+	''' Condition Node compilation:
+		return the c code of a condition
+	'''
 	c_code = ""
 	global indentation_level
 	_identation = indentation_generator()
@@ -178,6 +204,9 @@ def compile(self):
 
 @addToClass(AST.BlockNode)
 def compile(self):
+	''' Bloc Node compilation:
+		return the c code of a block
+	'''
 	c_code = ""
 	global indentation_level
 	_identation = indentation_generator()
@@ -195,6 +224,9 @@ def compile(self):
 
 @addToClass(AST.WhileNode)
 def compile(self):
+	''' While Node compilation:
+		return the c code of while loop
+	'''
 	c_code = ""
 	c_code += f"while({self.children[0].compile()})"
 	c_code += f"{self.children[1].compile()}\n"	#----------------------
@@ -202,6 +234,9 @@ def compile(self):
 
 @addToClass(AST.UntilNode)
 def compile(self):
+	''' Until Node compilation:
+		return the c code of until loop
+	'''
 	c_code = ""
 	c_code += f"while(!({self.children[0].compile()}))"
 	c_code += f"{self.children[1].compile()}\n"	#----------------------
@@ -209,6 +244,9 @@ def compile(self):
 
 @addToClass(AST.ForNode)
 def compile(self):
+	''' For Node compilation:
+		return the c code of for loop
+	'''
 	c_code = ""
 	c_code += f"for({self.children[0].compile()[:-2]};{self.children[1].compile()};{self.children[2].compile()[:-2]})\n"
 	c_code += f"{self.children[3].compile()}\n"
