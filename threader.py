@@ -47,7 +47,7 @@ def thread(self, lastNode):
     exitBody = self.children[3].thread(self)
     exitBody.addNext(self)
     exitInc = self.children[2].thread(self)
-    exitInc.addNext(beforeCond.next[-1]);
+    exitInc.addNext(beforeCond.next[-1])
     return self
 
 def thread(tree):
