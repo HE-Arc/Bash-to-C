@@ -139,9 +139,7 @@ def compile(self):
 	return c_code
 
 def convert_string_variables(str):
-	'''
-
-	'''
+	''' convert a string for the use of the printf function '''
 	str = str.replace("\"", "")
 	regex = re.compile("\$[A-Za-z_]{1}[A-Za-z0-9_]*")
 	result = regex.findall(str)
