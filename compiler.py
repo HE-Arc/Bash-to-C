@@ -214,7 +214,7 @@ def compile(self):
 	c_code += f"if ({self.children[0].compile()})\n"
 	c_code += f"{self.children[1].compile()}\n"
 	if len(self.children) > 2 :
-		c_code += _identation + "else\n"		#----------------------
+		c_code += _identation + "else\n"
 		c_code += f"{self.children[2].compile()}\n"
 	return c_code
 
@@ -247,7 +247,7 @@ def compile(self):
 	'''
 	c_code = ""
 	c_code += f"while({self.children[0].compile()})"
-	c_code += f"{self.children[1].compile()}\n"	#----------------------
+	c_code += f"{self.children[1].compile()}\n"
 	return c_code
 
 
@@ -258,7 +258,7 @@ def compile(self):
 	'''
 	c_code = ""
 	c_code += f"while(!({self.children[0].compile()}))"
-	c_code += f"{self.children[1].compile()}\n"	#----------------------
+	c_code += f"{self.children[1].compile()}\n"
 	return c_code
 
 

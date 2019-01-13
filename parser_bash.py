@@ -127,8 +127,8 @@ def p_until(p):
 def p_for(p):
     ''' statement : FOR SET_VARIABLE IN '{' INT '.' '.' INT '}' ';' DO newline block DONE '''
     var1 = AST.VariableNode(p[2])
-    var2 = AST.VariableNode("$"+p[2])       # Dans ce cas, on obtient la valeur donc GET
-    var3 = AST.VariableNode("$"+p[2])       # Dans ce cas, on obtient la valeur donc GET
+    var2 = AST.VariableNode("$"+p[2])       # In this we GET the value
+    var3 = AST.VariableNode("$"+p[2])       # In this we GET the value
     var4 = AST.VariableNode(p[2])
     inc = AST.AssignNode([var4, AST.OpNode('+', [var3, AST.IntNode(1)])])
     init_var = AST.AssignNode([var1, AST.IntNode(int(p[5]))])
