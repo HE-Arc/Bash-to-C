@@ -15,15 +15,18 @@ import re
 Create the basic c structure
 '''
 
-# Dictionary containing the variables of the program like : {NOM_VAR:[TYPE, VALEUR], ...}
+# Dictionary containing the variables of the program like : {VAR_NAME:[TYPE, VALEUR], ...}
 vars = dict()
+
 
 # Static var that represents the number of indentation for the next line to write
 indentation_level = 0
 
+
 def indentation_generator():
 	''' return the tabs string to place after a newline'''
 	return "\t" * indentation_level
+
 
 comparators = {
 	'-eq' : '==',
@@ -31,10 +34,12 @@ comparators = {
 	'-lt' : '<',
 }
 
+
 class VarType:
 	INT = "int"
 	FLOAT = "float"
 	STRING = "char"
+
 
 @addToClass(AST.ProgramNode)
 def compile(self):
@@ -56,12 +61,14 @@ def compile(self):
 	c_code += "}"
 	return c_code
 
+
 @addToClass(AST.VariableNode)
 def compile(self):
 	''' Variable Node Compilation:
 		return the name of the variable
 	'''
 	return self.tok[1::]
+
 
 @addToClass(AST.IntNode)
 def compile(self):
@@ -70,6 +77,7 @@ def compile(self):
 	'''
 	return self.tok
 
+
 @addToClass(AST.FloatNode)
 def compile(self):
 	''' Int Node Compilation:
@@ -77,12 +85,14 @@ def compile(self):
 	'''
 	return self.tok
 
+
 @addToClass(AST.StringNode)
 def compile(self):
 	''' String Node Compilation:
 		return a string value
 	'''
 	return self.tok
+
 
 @addToClass(AST.OpNode)
 def compile(self):
@@ -95,6 +105,7 @@ def compile(self):
 	operand_2 = self.children[1].compile()
 	c_code += f"{operand_1} {operator} {operand_2}"
 	return c_code
+
 
 @addToClass(AST.AssignNode)
 def compile(self):
@@ -132,6 +143,7 @@ def compile(self):
 
 	return c_code
 
+
 @addToClass(AST.EchoNode)
 def compile(self):
 	''' Echo Node compilation:
@@ -143,6 +155,7 @@ def compile(self):
 	c_code += convert_string_variables(str(node.tok))
 	c_code += ");\n"
 	return c_code
+
 
 def convert_string_variables(str):
 	''' convert a string for the use of the printf function '''
@@ -163,7 +176,7 @@ def convert_string_variables(str):
 		elif type == VarType.STRING:
 			replace_list.append("%s")
 
-	# Replace all the variable insite the string str
+	# Replace all the variable inside the string str
 	for i, variable in enumerate(result):
 		str = regex.sub(replace_list[i], str)
 
@@ -181,7 +194,7 @@ def convert_string_variables(str):
 @addToClass(AST.CmpNode)
 def compile(self):
 	''' Comparator Node compilation:
-		return the c code of a comparaison
+		return the c code of a comparison
 	'''
 	c_code = ""
 	cmp = comparators[self.cmp]
@@ -226,6 +239,7 @@ def compile(self):
 	c_code += _identation + "}"
 	return c_code
 
+
 @addToClass(AST.WhileNode)
 def compile(self):
 	''' While Node compilation:
@@ -235,6 +249,7 @@ def compile(self):
 	c_code += f"while({self.children[0].compile()})"
 	c_code += f"{self.children[1].compile()}\n"	#----------------------
 	return c_code
+
 
 @addToClass(AST.UntilNode)
 def compile(self):
@@ -246,6 +261,7 @@ def compile(self):
 	c_code += f"{self.children[1].compile()}\n"	#----------------------
 	return c_code
 
+
 @addToClass(AST.ForNode)
 def compile(self):
 	''' For Node compilation:
@@ -255,6 +271,7 @@ def compile(self):
 	c_code += f"for({self.children[0].compile()[:-2]};{self.children[1].compile()};{self.children[2].compile()[:-2]})\n"
 	c_code += f"{self.children[3].compile()}\n"
 	return c_code
+
 
 if __name__ == "__main__":
 	from parser_bash import parse

@@ -13,8 +13,10 @@ from lex import tokens
 import AST
 from tools import *
 
+
 vars = {}
 header_found = False
+
 
 precedence = (
     ('left', 'ADD_OP'),
@@ -23,6 +25,7 @@ precedence = (
     ('left', 'NE_CMP'),
     ('left', 'LT_CMP'),
 )
+
 
 def p_programme_statement(p):
     ''' programme : HEADER newline statement newline
@@ -95,6 +98,7 @@ def p_block(p):
     ''' block : statement newline '''
     p[0] = AST.BlockNode(p[1])
 
+
 def p_block_recurssive(p):
     ''' block : statement newline block '''
     p[0] = AST.BlockNode([p[1]]+p[3].children)
@@ -109,13 +113,16 @@ def p_condition_if_else(p):
     ''' statement : IF '[' expression ']' newline THEN newline block ELSE newline block FI '''
     p[0] = AST.CondNode([p[3], p[8], p[11]])
 
+
 def p_while(p):
     ''' statement : WHILE '[' expression ']' ';' DO newline block DONE '''
     p[0] = AST.WhileNode([p[3], p[8]])
 
+
 def p_until(p):
     ''' statement : UNTIL '[' expression ']' ';' DO newline block DONE '''
     p[0] = AST.UntilNode([p[3], p[8]])
+
 
 def p_for(p):
     ''' statement : FOR SET_VARIABLE IN '{' INT '.' '.' INT '}' ';' DO newline block DONE '''
@@ -127,6 +134,7 @@ def p_for(p):
     init_var = AST.AssignNode([var1, AST.IntNode(int(p[5]))])
     condition = AST.CmpNode('-lt', [var2, AST.IntNode(int(p[8])+1)])
     p[0] = AST.ForNode([init_var, condition, inc, p[13]])
+
 
 def p_error(p):
     if p:

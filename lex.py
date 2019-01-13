@@ -9,6 +9,7 @@ Python version: 3.6
 
 import ply.lex as lex
 
+
 reserved_words_c = (
 	'auto',	'else',	'long',	'switch',
 	'break',	'enum',	'register',	'typedef',
@@ -20,6 +21,7 @@ reserved_words_c = (
 	'do',	'int',	'struct',	'_Packed',
 	'double',
 )
+
 
 reserved_words = (
 	'echo',
@@ -36,6 +38,7 @@ reserved_words = (
 	'do',
 	'done',
 )
+
 
 tokens = (
 	# Header

@@ -34,6 +34,7 @@ def thread(self, lastNode):
     exitBodyIfNode.addNext(self)
     return self
 
+
 @addToClass(AST.WhileNode)
 @addToClass(AST.UntilNode)
 def thread(self, lastNode):
@@ -44,6 +45,7 @@ def thread(self, lastNode):
     exitBody = self.children[1].thread(self)
     exitBody.addNext(beforeCond.next[-1])
     return self
+
 
 @addToClass(AST.ForNode)
 def thread(self, lastNode):
@@ -58,6 +60,7 @@ def thread(self, lastNode):
     exitInc = self.children[2].thread(self)
     exitInc.addNext(beforeCond.next[-1])
     return self
+
 
 def thread(tree):
     ''' Thread an ASTTree '''
