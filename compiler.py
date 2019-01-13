@@ -1,6 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+'''
+Project: Bash-To-C
+Authors: Kim Biloni & Malik Fleury
+Python version: 3.6
+'''
+
 import AST
 from AST import addToClass
 import re
@@ -32,9 +38,9 @@ class VarType:
 
 @addToClass(AST.ProgramNode)
 def compile(self):
-	''' Program Node Compilation: 
+	''' Program Node Compilation:
 		return the c code of the program node and of all its children
-	''' 
+	'''
 	c_code = ""
 	global indentation_level
 	indentation_level = 0
@@ -52,35 +58,35 @@ def compile(self):
 
 @addToClass(AST.VariableNode)
 def compile(self):
-	''' Variable Node Compilation: 
+	''' Variable Node Compilation:
 		return the name of the variable
 	'''
 	return self.tok[1::]
 
 @addToClass(AST.IntNode)
 def compile(self):
-	''' Int Node Compilation: 
+	''' Int Node Compilation:
 		return an int value
 	'''
 	return self.tok
 
 @addToClass(AST.FloatNode)
 def compile(self):
-	''' Int Node Compilation: 
+	''' Int Node Compilation:
 		return a float value
 	'''
 	return self.tok
 
 @addToClass(AST.StringNode)
 def compile(self):
-	''' String Node Compilation: 
+	''' String Node Compilation:
 		return a string value
 	'''
 	return self.tok
 
 @addToClass(AST.OpNode)
 def compile(self):
-	''' Operator Node Compilation: 
+	''' Operator Node Compilation:
 		return the c code of an arithmetic operation
 	'''
 	c_code = ""
@@ -92,7 +98,7 @@ def compile(self):
 
 @addToClass(AST.AssignNode)
 def compile(self):
-	''' Assign Node Compilation: 
+	''' Assign Node Compilation:
 		return the c code of a variable declaration or assignment
 	'''
 	c_code = ""
