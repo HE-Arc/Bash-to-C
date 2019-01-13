@@ -10,6 +10,7 @@ Python version: 3.6
 import AST
 from AST import addToClass
 
+
 @addToClass(AST.Node)
 def thread(self, lastNode):
     ''' Node thread: thread a Node '''
